@@ -1,0 +1,5 @@
+*~
+.gradle
+knowrob_robcog/build/
+data_tmp
+export
