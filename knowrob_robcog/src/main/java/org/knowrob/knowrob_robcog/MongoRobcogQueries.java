@@ -27,7 +27,7 @@
   @license BSD
 */
 
-package org.knowrob.knowrob_unreal;
+package org.knowrob.knowrob_robcog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,34 +65,34 @@ import org.knowrob.vis.MarkerPublisher;
 import visualization_msgs.Marker;
 import geometry_msgs.Point;
 
-public class MongoUnrealQueries {
+public class MongoRobcogQueries {
 	
 	// marker unique ids
 	private Deque<String> markerIDs;
 	
 	// unreal connection to mongodb
-	private MongoUnrealConn mongoUnrealConn;
+	private MongoRobcogConn MongoRobcogConn;
 
 	
 	////////////////////////////////////////////////////////////////
 	///// MONGO CONNECTION
 	/**
-	 * MongoUnrealQueries constructor with new mongo connection
+	 * MongoRobcogQueries constructor with new mongo connection
 	 */	
-	public MongoUnrealQueries() {
+	public MongoRobcogQueries() {
 		// set the connection to unreal
-		MongoUnrealConn mongoUnrealConn = new MongoUnrealConn();
+		MongoRobcogConn MongoRobcogConn = new MongoRobcogConn();
 		
 		// init marker array ids
 		this.markerIDs = new ArrayDeque<String>();
 	}
 	
 	/**
-	 * MongoUnrealQueries constructor with copied mongo connection
+	 * MongoRobcogQueries constructor with copied mongo connection
 	 */	
-	public MongoUnrealQueries(MongoUnrealConn mongoUnrealConn) {
+	public MongoRobcogQueries(MongoRobcogConn MongoRobcogConn) {
 		// set the connection to unreal
-		this.mongoUnrealConn = mongoUnrealConn;
+		this.MongoRobcogConn = MongoRobcogConn;
 		
 		// init marker array ids
 		this.markerIDs = new ArrayDeque<String>();
@@ -389,7 +389,7 @@ public class MongoUnrealQueries {
 				.build();
 
 		// get results
-		Cursor cursor = this.mongoUnrealConn.coll.aggregate(pipeline, aggregationOptions);
+		Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
 
 		// if query has a response, return the pose
 		if(cursor.hasNext())
@@ -454,7 +454,7 @@ public class MongoUnrealQueries {
 				.build();
 
 		// get results
-		Cursor cursor = this.mongoUnrealConn.coll.aggregate(pipeline, aggregationOptions);
+		Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
 		
 		// Traj as dynamic array
 		ArrayList<double[]> traj_list = new ArrayList<double[]>();
@@ -569,7 +569,7 @@ public class MongoUnrealQueries {
 				.build();
 
 		// get results
-		Cursor cursor = this.mongoUnrealConn.coll.aggregate(pipeline, aggregationOptions);
+		Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
 
 		// if query has a response, return the pose
 		if(cursor.hasNext())
@@ -635,7 +635,7 @@ public class MongoUnrealQueries {
 				.build();
 
 		// get results
-		Cursor cursor = this.mongoUnrealConn.coll.aggregate(pipeline, aggregationOptions);
+		Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
 		
 		// Traj as dynamic array
 		ArrayList<double[]> traj_list = new ArrayList<double[]>();	
@@ -721,7 +721,7 @@ public class MongoUnrealQueries {
 				.build();
 
 		// get results
-		Cursor cursor = this.mongoUnrealConn.coll.aggregate(pipeline, aggregationOptions);
+		Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
 		
 		// if query has a response, return the names
 		if(cursor.hasNext())
@@ -793,7 +793,7 @@ public class MongoUnrealQueries {
 				.build();
 
 		// get results
-		Cursor cursor = this.mongoUnrealConn.coll.aggregate(pipeline, aggregationOptions);
+		Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
 
 		// Poses as dynamic array
 		ArrayList<double[]> pose_list = new ArrayList<double[]>();	
@@ -871,7 +871,7 @@ public class MongoUnrealQueries {
 				.build();
 
 		// get results
-		Cursor cursor = this.mongoUnrealConn.coll.aggregate(pipeline, aggregationOptions);
+		Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
 
 		// Trajectories as dynamic array (dynamic on the time part)
 		ArrayList<double[][]> bone_trajs = new ArrayList<double[][]>();

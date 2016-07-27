@@ -27,7 +27,7 @@
   @license BSD
 */
 
-package org.knowrob.knowrob_unreal;
+package org.knowrob.knowrob_robcog;
 
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +36,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import java.net.UnknownHostException;
 
-public class MongoUnrealConn{
+public class MongoRobcogConn{
 	
 	// mongo connection to the db 
 	private MongoClient mongoClient;
@@ -48,9 +48,9 @@ public class MongoUnrealConn{
 	public DBCollection coll;	
 
 	/**
-	 * MongoUnrealConn constructor
+	 * MongoRobcogConn constructor
 	 */
-	public MongoUnrealConn() {		
+	public MongoRobcogConn() {		
 		// check if MONGO_PORT_27017_TCP_ADDR and MONGO_PORT_27017_TCP_PORT 
 		// environment variables are set		
         Map<String, String> env = System.getenv();

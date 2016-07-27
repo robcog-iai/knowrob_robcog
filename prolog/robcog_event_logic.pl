@@ -1,4 +1,4 @@
-/** <module> unreal_event_logic
+/** <module> robcog_event_logic
 
   Copyright (C) 2016 Andrei Haidu
 
@@ -29,7 +29,7 @@
 */
 
 
-:- module(unreal_event_logic,
+:- module(robcog_event_logic,
     [
         set_ep/0,
         set_ep/1,
@@ -49,7 +49,7 @@
 :- rdf_db:rdf_register_ns(owl,    'http://www.w3.org/2002/07/owl#', [keep(true)]).
 :- rdf_db:rdf_register_ns(knowrob, 'http://knowrob.org/kb/knowrob.owl#',  [keep(true)]).
 :- rdf_db:rdf_register_ns(knowrob_u, 'http://knowrob.org/kb/knowrob_u.owl#', [keep(true)]).
-:- rdf_db:rdf_register_ns(log_u, 'http://knowrob.org/kb/unreal_log.owl#', [keep(true)]).
+:- rdf_db:rdf_register_ns(log_u, 'http://knowrob.org/kb/robcog_log.owl#', [keep(true)]).
 :- rdf_db:rdf_register_ns(u_map, 'http://knowrob.org/kb/u_map.owl#', [keep(true)]).
 
 
@@ -75,7 +75,7 @@
 % Sets the current working episode instance
 %
 set_ep :-
-  rdf_has(EpInst, rdf:type, knowrob:'UnrealExperiment'),
+  rdf_has(EpInst, rdf:type, knowrob:'robcogExperiment'),
   set_ep(EpInst).
 
 %% set_ep(+EpInst) is nondet.

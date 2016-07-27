@@ -1,4 +1,4 @@
-/** <module> unreal_mongo_queries
+/** <module> robcog_mongo_queries
 
   Copyright (C) 2016 Andrei Haidu
 
@@ -28,7 +28,7 @@
   @license BSD
 */
 
-:- module(unreal_mongo_queries,
+:- module(robcog_mongo_queries,
     [
         connect_to_db/1,
         set_mongo_coll/1,
@@ -78,15 +78,15 @@
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %   
 % Database where to read the raw data from
 connect_to_db(DBName) :-
-    mongo_unreal_conn(MongoUnreal),
-    jpl_call(MongoUnreal, 'SetDatabase', [DBName], @void).
+    mongo_robcog_conn(MongoRobcog),
+    jpl_call(MongoRobcog, 'SetDatabase', [DBName], @void).
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %   
 % Set the collection from which to query
 % TODO make sure the DB is set
 set_mongo_coll(Coll) :-
-    mongo_unreal_conn(MongoUnreal),
-    jpl_call(MongoUnreal, 'SetCollection', [Coll], @void).
+    mongo_robcog_conn(MongoRobcog),
+    jpl_call(MongoRobcog, 'SetCollection', [Coll], @void).
 
 
 
@@ -95,7 +95,7 @@ set_mongo_coll(Coll) :-
 % Actor = 'LeftHand'
 actor_pose(Actor, Ts, Pose) :-
     get_ep(EpInst),
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'GetActorPoseAt', [Actor, Ts], JavaArr),
@@ -105,7 +105,7 @@ actor_pose(Actor, Ts, Pose) :-
 % Get the pose of the actor at the given timestamp
 % Actor = 'LeftHand'
 actor_pose(EpInst, Actor, Ts, Pose) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'GetActorPoseAt', [Actor, Ts], JavaArr),
@@ -119,14 +119,14 @@ actor_pose(EpInst, Actor, Ts, Pose) :-
 % Color = 'blue'
 % Scale = 0.01 (meters)
 view_actor_pose(EpInst, Actor, Ts, MarkerType, Color, Scale) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewActorPoseAt',
         [Actor, Ts, MarkerType, Color, Scale], @void).
 %%
 view_actor_pose(EpInst, Actor, Ts, MarkerID, MarkerType, Color, Scale) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewActorPoseAt',
@@ -138,14 +138,14 @@ view_actor_pose(EpInst, Actor, Ts, MarkerID, MarkerType, Color, Scale) :-
 % MeshPath = 'path to the mesh'
 % MarkerID = 'hand_marker_id1'
 view_mesh(EpInst, Actor, Ts, MeshPath) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewActorMeshAt',
         [Actor, Ts, MeshPath], @void).
 %%
 view_mesh(EpInst, Actor, Ts, MarkerID, MeshPath) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewActorMeshAt',
@@ -157,14 +157,14 @@ view_mesh(EpInst, Actor, Ts, MarkerID, MeshPath) :-
 % MeshPath = 'path to the mesh'
 % MarkerID = 'hand_marker_id1'
 view_bones_meshes(EpInst, Actor, Ts, MeshFolderPath) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBonesMeshesAt',
         [Actor, Ts, MeshFolderPath], @void).
 %%
 view_bones_meshes(EpInst, Actor, Ts, MarkerID, MeshFolderPath) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBonesMeshesAt',
@@ -175,7 +175,7 @@ view_bones_meshes(EpInst, Actor, Ts, MarkerID, MeshFolderPath) :-
 % Actor = 'LeftHand'
 % DT = 0.01 (seconds)
 actor_traj(EpInst, Actor, Start, End, DT, Traj) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'GetActorTraj', [Actor, Start, End, DT], JavaMultiArr),
@@ -191,14 +191,14 @@ actor_traj(EpInst, Actor, Start, End, DT, Traj) :-
 % Scale = 0.01 (meters)
 % DT = 0.01 (seconds)
 view_actor_traj(EpInst, Actor, Start, End, MarkerType, Color, Scale, DT) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewActorTraj',
         [Actor, Start, End, MarkerType, Color, Scale, DT], @void).
 %%
 view_actor_traj(EpInst, Actor, Start, End, MarkerID, MarkerType, Color, Scale, DT) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewActorTraj',
@@ -210,7 +210,7 @@ view_actor_traj(EpInst, Actor, Start, End, MarkerID, MarkerType, Color, Scale, D
 % Actor = 'LeftHand'
 % Bone = 'index_3_l'
 bone_pose(EpInst, Actor, Bone, Ts, Pose) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'GetBonePoseAt', [Actor, Ts, Bone], JavaArr),
@@ -225,14 +225,14 @@ bone_pose(EpInst, Actor, Bone, Ts, Pose) :-
 % Color = 'blue'
 % Scale = 0.01 (meters)
 view_bone_pose(EpInst, Actor, Bone, Ts, MarkerType, Color, Scale) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBonePose',
         [Actor, Bone, Ts, MarkerType, Color, Scale], @void).
 %%
 view_bone_pose(EpInst, Actor, Bone, Ts, MarkerID, MarkerType, Color, Scale) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBonePose',
@@ -245,7 +245,7 @@ view_bone_pose(EpInst, Actor, Bone, Ts, MarkerID, MarkerType, Color, Scale) :-
 % Bone = 'index_3_l'
 % DT = 0.01 (seconds)
 bone_traj(EpInst, Actor, Bone, Start, End, DT, Traj) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'GetBoneTraj', [Actor, Bone, Start, End, DT], JavaMultiArr),
@@ -262,14 +262,14 @@ bone_traj(EpInst, Actor, Bone, Start, End, DT, Traj) :-
 % Scale = 0.01 (meters)
 % DT = 0.01 (seconds)
 view_bone_traj(EpInst, Actor, Bone, Start, End, MarkerType, Color, Scale, DT) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBoneTraj', 
         [Actor, Bone, Start, End, MarkerType, Color, Scale, DT], @void).
 %%
 view_bone_traj(EpInst, Actor, Bone, Start, End, MarkerID, MarkerType, Color, Scale, DT) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBoneTraj', 
@@ -280,7 +280,7 @@ view_bone_traj(EpInst, Actor, Bone, Start, End, MarkerID, MarkerType, Color, Sca
 % Get the names of the actor bones
 % Actor = 'LeftHand'
 bones_names(EpInst, Actor, Bones) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'GetBonesNames', [Actor], JavaArr),
@@ -290,7 +290,7 @@ bones_names(EpInst, Actor, Bones) :-
 % Get the poses of the actor bones at the given timestamp
 % Actor = 'LeftHand'
 bones_poses(EpInst, Actor, Ts, Poses) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'GetBonesPoses', [Actor, Ts], JavaMultiArr),
@@ -305,14 +305,14 @@ bones_poses(EpInst, Actor, Ts, Poses) :-
 % Color = 'blue'
 % Scale = 0.01 (meters)
 view_bones_poses(EpInst, Actor, Ts, MarkerType, Color, Scale) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBonesPoses',
         [Actor, Ts, MarkerType, Color, Scale], @void).
 %%
 view_bones_poses(EpInst, Actor, Ts, MarkerID, MarkerType, Color, Scale) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBonesPoses',
@@ -323,7 +323,7 @@ view_bones_poses(EpInst, Actor, Ts, MarkerID, MarkerType, Color, Scale) :-
 % Actor = 'LeftHand'
 % DT = 0.01 (seconds)
 bones_trajs(EpInst, Actor, Start, End, DT, Trajs) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'GetBonesTrajs', [Actor, Start, End, DT], JavaMultiArr),
@@ -340,14 +340,14 @@ bones_trajs(EpInst, Actor, Start, End, DT, Trajs) :-
 % Scale = 0.01 (meters)
 % DT = 0.01 (seconds)
 view_bones_trajs(EpInst, Actor, Start, End, MarkerType, Color, Scale, DT) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBonesTrajs',
         [Actor, Start, End, MarkerType, Color, Scale, DT], @void).
 %%
 view_bones_trajs(EpInst, Actor, Start, End, MarkerID, MarkerType, Color, Scale, DT) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     get_mongo_coll_name(EpInst, CollName),
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBonesTrajs',
@@ -355,22 +355,22 @@ view_bones_trajs(EpInst, Actor, Start, End, MarkerID, MarkerType, Color, Scale, 
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
-% Remove all markers created with the knowrob_unreal package
+% Remove all markers created with the knowrob_robcog package
 u_marker_remove(all) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     jpl_call(MongoQuery, 'RemoveAllMarkers', [], @void).
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
 % Remove the marker witht he given ID
 % MarkerID = 'coll_traj_id'
 u_marker_remove(MarkerID) :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     jpl_call(MongoQuery, 'RemoveMarker', [MarkerID], @void).
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
-% Remove all markers created with the knowrob_unreal package
+% Remove all markers created with the knowrob_robcog package
 u_marker_remove_all :-
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     jpl_call(MongoQuery, 'RemoveAllMarkers', [], @void).
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
@@ -384,6 +384,6 @@ add_rating(EpInst, RatingType, Score, EpisodesPath) :-
     atom_concat(EpisodesPath, FolderName, FolderPath),
     rating_file(EpInst, FileName),
     atom_concat(FolderPath, FileName, FilePath),
-    mongo_unreal_query(MongoQuery),
+    mongo_robcog_query(MongoQuery),
     jpl_call(MongoQuery, 'AddRating',
         [RatingInst, RatingType, Score, FilePath], @void).

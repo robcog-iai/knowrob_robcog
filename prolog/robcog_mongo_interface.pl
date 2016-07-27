@@ -1,5 +1,5 @@
 
-/** <module> unreal_mongo_interface
+/** <module> robcog_mongo_interface
 
   Copyright (C) 2016 by Andrei Haidu
 
@@ -29,53 +29,53 @@
   @license BSD
 */
 
-:- module(unreal_mongo_interface,
+:- module(robcog_mongo_interface,
   [
-		mongo_unreal_conn/1,
-        mongo_unreal_query/1
+		mongo_robcog_conn/1,
+        mongo_robcog_query/1
   ]).
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-% Create the mongo unreal interface object
+% Create the mongo robcog interface object
 % (makes sure the interface is only created once)
 
 % set flag
 :- assert(connection_flag(fail)).
 
 % from knowrob_mongo.pl
-mongo_unreal_conn :-
-    mongo_unreal_conn(_).
+mongo_robcog_conn :-
+    mongo_robcog_conn(_).
 
 % check flag, then init interface
-mongo_unreal_conn(MongoUnreal) :-
+mongo_robcog_conn(MongoRobcog) :-
     connection_flag(fail), 	
-    jpl_new('org.knowrob.knowrob_unreal.MongoUnrealConn',[], MongoUnreal),
+    jpl_new('org.knowrob.knowrob_robcog.MongoRobcogConn',[], MongoRobcog),
     retract(connection_flag(fail)),
-    assert(connection_flag(MongoUnreal)),!.
+    assert(connection_flag(MongoRobcog)),!.
 
 % if set, return object
-mongo_unreal_conn(MongoUnreal) :-
-    connection_flag(MongoUnreal).
+mongo_robcog_conn(MongoRobcog) :-
+    connection_flag(MongoRobcog).
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-% Create the mongo unreal query object
+% Create the mongo robcog query object
 % (makes sure the interface is only created once)
 
 % set flag
 :- assert(query_flag(fail)).
 
-mongo_unreal_query :-
-  mongo_unreal_query(_).
+mongo_robcog_query :-
+  mongo_robcog_query(_).
 
 % check flag, then init interface
-mongo_unreal_query(MongoQuery) :-
+mongo_robcog_query(MongoQuery) :-
     query_flag(fail),  
-    mongo_unreal_conn(MongoUnreal), 
-    jpl_new('org.knowrob.knowrob_unreal.MongoUnrealQueries',[MongoUnreal], MongoQuery),
+    mongo_robcog_conn(MongoRobcog), 
+    jpl_new('org.knowrob.knowrob_robcog.MongoRobcogQueries',[MongoRobcog], MongoQuery),
     retract(query_flag(fail)),
     assert(query_flag(MongoQuery)),!.
 
 % if set, return object
-mongo_unreal_query(MongoQuery) :-
+mongo_robcog_query(MongoQuery) :-
     query_flag(MongoQuery).

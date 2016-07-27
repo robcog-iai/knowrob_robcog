@@ -1,4 +1,4 @@
-/** <module> unreal_games
+/** <module> robcog_games
 
   Copyright (C) 2016 Andrei Haidu
 
@@ -29,7 +29,7 @@
 */
 
 
-:- module(unreal_games,
+:- module(robcog_games,
     [
         ep_inst/1,
         show_ep_sem_map/1,
@@ -64,7 +64,7 @@
 :- rdf_db:rdf_register_ns(owl,    'http://www.w3.org/2002/07/owl#', [keep(true)]).
 :- rdf_db:rdf_register_ns(knowrob, 'http://knowrob.org/kb/knowrob.owl#',  [keep(true)]).
 :- rdf_db:rdf_register_ns(knowrob_u, 'http://knowrob.org/kb/knowrob_u.owl#', [keep(true)]).
-:- rdf_db:rdf_register_ns(log_u, 'http://knowrob.org/kb/unreal_log.owl#', [keep(true)]).
+:- rdf_db:rdf_register_ns(log_u, 'http://knowrob.org/kb/robcog_log.owl#', [keep(true)]).
 :- rdf_db:rdf_register_ns(u_map, 'http://knowrob.org/kb/u_map.owl#', [keep(true)]).
 
 % define predicates as rdf_meta predicates
@@ -85,7 +85,7 @@
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % get the instance of the episode
 ep_inst(EpInst) :-
-    rdf_has(EpInst, rdf:type, knowrob:'UnrealExperiment').
+    rdf_has(EpInst, rdf:type, knowrob:'robcogExperiment').
 
 % view the semantic map of the episode
 % the cut ('!') operator is needed due to the following deadlock error with marker updates:

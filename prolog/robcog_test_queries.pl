@@ -1,5 +1,5 @@
 
-/** <module> knowrob_unreal_games
+/** <module> knowrob_robcog
 
   Copyright (C) 2016 Andrei Haidu
 
@@ -29,7 +29,7 @@
   @license BSD
 */
 
-:- module(unreal_test_queries,
+:- module(robcog_test_queries,
     [
     u_export/1,
     grasp_bowl/4,
@@ -72,10 +72,10 @@ arr_to_list_maplist(Objs, Trajs) :-
 %%
 u_load :-
     % load all episodes
-    u_load_episodes('/home/haidu/sandbox/catkin_ws/src/knowrob_unreal/data_tmp/ep'),
+    u_load_episodes('/home/haidu/sandbox/catkin_ws/src/knowrob_robcog/data_tmp/ep'),
     
     % connect to the raw data 
-    connect_to_db('unreal_test'). 
+    connect_to_db('robcog_test'). 
 
 
 %%
@@ -125,10 +125,10 @@ u_test :-
     %actor_traj(EpInst, 'LeftHand', 'timepoint_114.054411', 'timepoint_119.054411', 0.1, ActTraj).
     %view_actor_pose(EpInst, 'LeftHand', GraspBowlStart, 'cube', 'green', 0.1).
     %view_actor_traj(EpInst, 'LeftHand', GraspBowlStart, GraspBowlEnd, 'h_id1', 'point', 'red', 0.01, 0.01).
-    %view_mesh(EpInst, ObjShortName, GraspBowlStart, 'pipatm_id7', 'package://sim/unreal/Bowl.dae').
-    %view_mesh(EpInst, ObjShortName, GraspBowlStart, 'pipatm_id7', 'package://sim/unreal/LeftHand/pinky_1_l.dae').
-    %view_bones_meshes(EpInst, 'LeftHand', GraspBowlStart, 'pipatm_id8', 'package://sim/unreal/LeftHand/').
-    %view_bones_meshes(EpInst, 'RightHand', GraspBowlStart, 'pipatm_id7', 'package://sim/unreal/RightHand/').
+    %view_mesh(EpInst, ObjShortName, GraspBowlStart, 'pipatm_id7', 'package://sim/robcog/Bowl.dae').
+    %view_mesh(EpInst, ObjShortName, GraspBowlStart, 'pipatm_id7', 'package://sim/robcog/LeftHand/pinky_1_l.dae').
+    %view_bones_meshes(EpInst, 'LeftHand', GraspBowlStart, 'pipatm_id8', 'package://sim/robcog/LeftHand/').
+    %view_bones_meshes(EpInst, 'RightHand', GraspBowlStart, 'pipatm_id7', 'package://sim/robcog/RightHand/').
 
     %bone_traj(EpInst, 'LeftHand', 'pinky_1_l', GraspBowlStart, GraspBowlEnd, 0.1, BoneTraj).
     %bone_traj(EpInst, 'LeftHand', 'pinky_1_l', 'timepoint_114.054411', 'timepoint_119.054411', 0.1, BoneTraj).
