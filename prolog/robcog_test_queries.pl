@@ -71,8 +71,8 @@ arr_to_list_maplist(Objs, Trajs) :-
 
 %%
 u_load :-
-    % load all episodes
-    u_load_episodes('/home/haidu/sandbox/catkin_ws/src/knowrob_robcog/data_tmp/ep'),
+    % load all episodes    
+    u_load_episodes('/home/haidu/TempLogs/RobCoG/rcg_0/Episodes'),
     
     % connect to the raw data 
     connect_to_db('robcog_test'). 
