@@ -79,7 +79,7 @@ u_load :-
     owl_parse('/home/haidu/TempLogs/RobCoG/rcg_1/SemanticMap.owl'),
 
     % connect to the raw data 
-    connect_to_db('RobCoG'). 
+    connect_to_db('RobCoG').
 
 %%
 u_furniture_test :-
@@ -108,6 +108,12 @@ u_test :-
     %% % get the instance of the current episode
     ep_inst(EpInst),
 
+<<<<<<< HEAD
+    get_mongo_coll_name(EpInst, Coll),
+
+    %% % get the bone names
+    bones_names(EpInst, 'LeftHand_8wvF', Bones),
+=======
     % semantic map instance
     sem_map_inst(MapInst),
 
@@ -125,6 +131,7 @@ u_test :-
 
     % get the bone names
     bones_names(EpInst, HandShortName, Bones),
+>>>>>>> 40b0df71c83ec967b73b1c50da04d71a954b6f56
     writeln(Bones),
 
     % get episode tag
