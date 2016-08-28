@@ -72,10 +72,13 @@ arr_to_list_maplist(Objs, Trajs) :-
 %%
 u_load :-
     % load all episodes    
-    u_load_episodes('/home/haidu/TempLogs/RobCoG/rcg_0/Episodes'),
+    u_load_episodes('/home/haidu/TempLogs/RobCoG/rcg_1/Episodes'),
     
+    % load semantic map
+    owl_parse('/home/haidu/TempLogs/RobCoG/rcg_1/SemanticMap.owl'),
+
     % connect to the raw data 
-    connect_to_db('robcog_test'). 
+    connect_to_db('robcog'). 
 
 
 %%
@@ -95,16 +98,18 @@ u_test :-
     %% % get the instance of the current episode
     ep_inst(EpInst),
 
-    %% % get the bone names
-    bones_names(EpInst, 'LeftHand', Bones),
-    writeln(Bones).
+    get_mongo_coll_name(EpInst, Coll),
 
-    %% % get episode tag
-    %% ep_tag(EpInst, EpTag),
-    %% write('** Episode tag: '), write(EpTag), nl,
+    %% % get the bone names
+    bones_names(EpInst, 'LeftHand_8wvF', Bones),
+    writeln(Bones),
+
+    % get episode tag
+    ep_tag(EpInst, EpTag),
+    write('** Episode tag: '), write(EpTag), nl.
 
     %% obj_type(ObjInst,  knowrob:'Bowl'),
-    %% %rdf_has(ObjInst, rdf:type, ObjType),
+    %% rdf_has(ObjInst, rdf:type, ObjType).
 
     %% % get events which occurred in the episodes
     %% u_occurs(EpInst, GraspEventInst, GraspBowlStart, GraspBowlEnd),

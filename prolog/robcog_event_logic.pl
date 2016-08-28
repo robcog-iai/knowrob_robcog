@@ -75,7 +75,7 @@
 % Sets the current working episode instance
 %
 set_ep :-
-  rdf_has(EpInst, rdf:type, knowrob:'robcogExperiment'),
+  rdf_has(EpInst, rdf:type, knowrob:'UnrealExperiment'),
   set_ep(EpInst).
 
 %% set_ep(+EpInst) is nondet.
