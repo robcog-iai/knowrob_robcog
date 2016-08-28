@@ -78,7 +78,7 @@ u_load :-
     owl_parse('/home/haidu/TempLogs/RobCoG/rcg_1/SemanticMap.owl'),
 
     % connect to the raw data 
-    connect_to_db('robcog'). 
+    connect_to_db('RobCoG'). 
 
 
 %%
