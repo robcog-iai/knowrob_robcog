@@ -35,6 +35,7 @@
     grasp_bowl/4,
     grasp_spatula/4,
     u_load/0,
+    u_furniture_test/0,
     u_test/0,
     u_test2/0,
     term/1
@@ -80,6 +81,15 @@ u_load :-
     % connect to the raw data 
     connect_to_db('RobCoG'). 
 
+%%
+u_furniture_test :-
+    ep_inst(EpInst),
+    % get events which occurred in the episodes
+    u_occurs(EpInst, EventInst, Start, End),
+    % check for open furniture event
+    event_type(EventInst, knowrob_u:'FurnitureStateClosed'), 
+    % check object acted on
+    acted_on(EventInst, knowrob:'FridgeDrawer').
 
 %%
 u_test2 :-
