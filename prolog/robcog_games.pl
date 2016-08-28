@@ -32,6 +32,7 @@
 :- module(robcog_games,
     [
         ep_inst/1,
+        u_inst_name/2,
         show_ep_sem_map/1,
         sem_map_inst/1,
         sem_map_inst/2,
@@ -71,6 +72,7 @@
 % define predicates as rdf_meta predicates
 % (i.e. rdf namespaces are automatically expanded)
 :-  rdf_meta
+    u_inst_name(r,r),
     show_ep_sem_map(+),
     sem_map_inst(r, r),
     rating_score(r, r, r),
@@ -87,6 +89,13 @@
 % get the instance of the episode
 ep_inst(EpInst) :-
     rdf_has(EpInst, rdf:type, knowrob:'UnrealExperiment').
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% get the unique short name of the class
+% e.g. Class = knowrob:'LeftHand'
+u_inst_name(Class, InstShortName) :-
+    rdf_has(Inst, rdf:type, Class),
+    iri_xml_namespace(Inst, _, InstShortName).
 
 % view the semantic map of the episode
 % the cut ('!') operator is needed due to the following deadlock error with marker updates:
@@ -115,8 +124,8 @@ rating_score(EpInst, RatingType, RatingScore) :-
     rdf_has(RatingInst, knowrob_u:'ratingScore', literal(type(_, RatingScore))).
 
 % get the class name of the event instance
-u_task_context(EventInstance, TaskContext) :-
-   rdf_has(EventInstance, knowrob:'taskContext', literal(type(_, TaskContext))).
+u_task_context(EventInst, TaskContext) :-
+   rdf_has(EventInst, knowrob:'taskContext', literal(type(_, TaskContext))).
 
 % get events which occured in the experiment
 u_occurs(EpInst, EventInst) :-
@@ -236,45 +245,6 @@ u_load_episodes(Path) :-
                     %write('Skip entry: '), write(CurrEntry), nl
                     true
             )
-    ). 
-    u_load_episodes2(Path) :-
-    % get all entries from the given path
-    directory_files(Path, Entries),
-    % iterate through all the 1st level entries
-    forall(member(CurrEntry, Entries),(
-        % check that entries are not special types '..' / '.'
-        (CurrEntry \== '.', CurrEntry \== '..') ->
-            % true branch
-            (
-                % add '/' to the entry name and add them to the path
-                atom_concat('/', CurrEntry, CurrentFolder),
-                atom_concat(Path, CurrentFolder, CurrFolderPath),
-                % get all entries from the current folder
-                directory_files(CurrFolderPath, SecondEntries),
-                % iterate through all the 2nd level entries
-                forall(member(CurrSecondEntry, SecondEntries),( 
-                    % check that entries are not special types '..' / '.' and is owl
-                    file_name_extension(_, Ext, CurrSecondEntry),
-                    %write('!!!! Ext of type: '),write(Ext),
-                    (CurrSecondEntry \== '.', CurrSecondEntry \== '..', Ext == 'owl') ->
-                    % true branch
-                    (
-                        % add '/' to the filename and add it to the path
-                        atom_concat('/', CurrSecondEntry, CurrOwl),
-                        atom_concat(CurrFolderPath, CurrOwl, OwlPath),
-                        % parse the current owl file
-                        owl_parse(OwlPath)
-                    );
-                    %false branch
-                    %write('Skip entry: '), write(CurrSecondEntry), nl
-                    true
-                    )
-                )
-            );
-            % false branch
-            %write('Skip entry: '), write(CurrEntry), nl
-            true
-        )
     ). 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
