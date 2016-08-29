@@ -144,7 +144,7 @@ u_ep_timeline(EpInst, DiagramID, Title) :-
         (u_occurs(EpInst, EvInst, Start, End), u_task_context(EvInst, TC), time_term(Start, ST), time_term(End, ET)), 
         Events),
     pairs_keys_values(Events, Contexts, Times), 
-    pairs_keys_values(Times, StartTimes, EndTimes).
+    pairs_keys_values(Times, StartTimes, EndTimes),
     add_timeline(DiagramID, Title, Contexts, StartTimes, EndTimes).
 
 % create timeline diagram of the given experiment with of the given class
@@ -157,7 +157,7 @@ u_ep_timeline(EpInst, Class, DiagramID, Title) :-
             time_term(Start, ST), time_term(End, ET)), 
         Events),
     pairs_keys_values(Events, Contexts, Times), 
-    pairs_keys_values(Times, StartTimes, EndTimes).
+    pairs_keys_values(Times, StartTimes, EndTimes),
     add_timeline(DiagramID, Title, Contexts, StartTimes, EndTimes).
 
 % get a given event type
