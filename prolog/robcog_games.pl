@@ -40,7 +40,7 @@
         u_task_context/2,
         u_occurs/2,
         u_occurs/4,
-        u_ep_timeline/3,
+        u_ep_timeline/4,
         event_type/2,
         obj_type/2,
         obj_mesh/2,
@@ -53,7 +53,6 @@
         only_in_contact/3,
 
         u_load_episodes/1,
-        u_load_episodes2/1,
         ep_tag/2,
         ep_folder/2,
         rating_file/2,
@@ -74,6 +73,7 @@
 :-  rdf_meta
     u_inst_name(r,r),
     show_ep_sem_map(+),
+    u_ep_timeline(r,r,+,+),
     sem_map_inst(r, r),
     rating_score(r, r, r),
     event_type(+, r),
@@ -138,12 +138,25 @@ u_occurs(EpInst, EventInst, Start, End) :-
     rdf_has(EventInst, knowrob:'endTime', End).
 
 % create timeline diagram of the given experiment
-u_ep_timeline(EpInst, DiagramID, Title) :-
+u_ep_timeline(EpInst, all, DiagramID, Title) :-
     findall(TC-(ST-ET),
         (u_occurs(EpInst, EvInst, Start, End), u_task_context(EvInst, TC), time_term(Start, ST), time_term(End, ET)), 
         Events),
     pairs_keys_values(Events, Contexts, Times), 
-    pairs_keys_values(Times, StartTimes, EndTimes),
+    pairs_keys_values(Times, StartTimes, EndTimes).
+    add_timeline(DiagramID, Title, Contexts, StartTimes, EndTimes).
+
+% create timeline diagram of the given experiment with of the given class
+% e.g Class = knowrob_u:'TouchingSituation'
+u_ep_timeline(EpInst, Class, DiagramID, Title) :-
+    findall(TC-(ST-ET),(
+            u_occurs(EpInst, EvInst, Start, End),
+            rdfs_instance_of(EvInst, Class),
+            u_task_context(EvInst, TC),
+            time_term(Start, ST), time_term(End, ET)), 
+        Events),
+    pairs_keys_values(Events, Contexts, Times), 
+    pairs_keys_values(Times, StartTimes, EndTimes).
     add_timeline(DiagramID, Title, Contexts, StartTimes, EndTimes).
 
 % get a given event type
