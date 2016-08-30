@@ -57,7 +57,9 @@
         ep_tag/2,
         ep_folder/2,
         rating_file/2,
-        get_mongo_coll_name/2
+        get_mongo_coll_name/2,
+
+        u_split_pose/3
 
     ]).
 
@@ -288,3 +290,9 @@ get_mongo_coll_name(EpInst, Coll) :-
 % Helper functions
 maplist_arr_to_list(ObjsArr, List) :-
     maplist(jpl_array_to_list, ObjsArr, List).
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
+% Split pose list into position and quaternion
+u_split_pose(Pose, Pos, Quat) :-
+    [X,Y,Z|Quat] = Pose,
+    Pos = [X,Y,Z].
