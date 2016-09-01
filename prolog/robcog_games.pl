@@ -46,6 +46,7 @@
         obj_type/2,
         obj_mesh/2,
         acted_on/2,
+        performed_by/2,
 
         particle_type/2,
         from_location/2,
@@ -83,6 +84,7 @@
     obj_type(+, r),
     obj_mesh(+, r),
     acted_on(+, r),
+    performed_by(+, r),
     particle_type(+, r),
     in_contact(+, r, r),
     only_in_contact(+, r, r).
@@ -168,8 +170,8 @@ event_type(EventInst, EventType) :-
 
 % get the type of the object instance
 obj_type(ObjInst, ObjType) :-
-    rdf_has(ObjInst, rdf:type, ObjType).
-    %not(rdf_equal(ObjType, owl:'NamedIndividual')).
+    rdf_has(ObjInst, rdf:type, ObjType),
+    not(rdf_equal(ObjType, owl:'NamedIndividual')).
 
 % get the type of the object instance
 obj_mesh(ObjInst, ObjMeshPath) :-
@@ -179,6 +181,10 @@ obj_mesh(ObjInst, ObjMeshPath) :-
 acted_on(EventInst, ObjActedOnType) :-
     rdf_has(EventInst, knowrob:'objectActedOn', ObjActedOnInst),
     rdf_has(ObjActedOnInst, rdf:type, ObjActedOnType).
+
+% check performed by
+performed_by(EventInst, PerformedByInst) :-
+    rdf_has(EventInst, knowrob:'performedBy', PerformedByInst).
 
 % check particle type
 particle_type(EventInst, ParticleType) :-

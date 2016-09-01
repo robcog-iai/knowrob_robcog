@@ -50,21 +50,21 @@ u_export(File) :-
 
 %%
 grasp_bowl(ExpInst, EventInst, Start, End) :-	
-	% get events which occurred in the episodes
-	u_occurs(ExpInst, EventInst, Start, End),
-	% check for grasping events
-	event_type(EventInst, knowrob:'GraspingSomething'),	
-	% check object acted on
-	acted_on(EventInst, knowrob:'Bowl').
+  % get events which occurred in the episodes
+  u_occurs(ExpInst, EventInst, Start, End),
+  % check for grasping events
+  event_type(EventInst, knowrob:'GraspingSomething'),	
+  % check object acted on
+  acted_on(EventInst, knowrob:'Bowl').
 
 %%
 grasp_spatula(ExpInst, EventInst, Start, End) :-	
-	% get events which occurred in the episodes
-	u_occurs(ExpInst, EventInst, Start, End),
-	% check for grasping events
-	event_type(EventInst, knowrob:'GraspingSomething'),	
-	% check object acted on
-	acted_on(EventInst, knowrob:'Spatula').
+  % get events which occurred in the episodes
+  u_occurs(ExpInst, EventInst, Start, End),
+  % check for grasping events
+  event_type(EventInst, knowrob:'GraspingSomething'),	
+  % check object acted on
+  acted_on(EventInst, knowrob:'Spatula').
 
 
 arr_to_list_maplist(Objs, Trajs) :-
@@ -72,24 +72,24 @@ arr_to_list_maplist(Objs, Trajs) :-
 
 %%
 u_load :-
-    % load all episodes    
-    u_load_episodes('/home/haidu/TempLogs/RobCoG/rcg_1/Episodes'),
-    
-    % load semantic map
-    owl_parse('/home/haidu/TempLogs/RobCoG/rcg_1/SemanticMap.owl'),
+  % load all episodes    
+  u_load_episodes('/home/haidu/TempLogs/RobCoG/rcg_4/Episodes'),
+  
+  % load semantic map
+  owl_parse('/home/haidu/TempLogs/RobCoG/rcg_4/SemanticMap.owl'),
 
-    % connect to the raw data 
-    connect_to_db('RobCoG').
+  % connect to the raw data 
+  connect_to_db('RobCoG').
 
 %%
 u_furniture_test :-
-    ep_inst(EpInst),
-    % get events which occurred in the episodes
-    u_occurs(EpInst, EventInst, Start, End),
-    % check for open furniture event
-    event_type(EventInst, knowrob_u:'FurnitureStateClosed'), 
-    % check object acted on
-    acted_on(EventInst, knowrob:'FridgeDrawer').
+  ep_inst(EpInst),
+  % get events which occurred in the episodes
+  u_occurs(EpInst, EventInst, Start, End),
+  % check for open furniture event
+  event_type(EventInst, knowrob_u:'FurnitureStateClosed'), 
+  % check object acted on
+  acted_on(EventInst, knowrob:'FridgeDrawer').
 
 %%
 u_test2 :-

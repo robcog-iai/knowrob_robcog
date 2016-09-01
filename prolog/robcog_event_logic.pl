@@ -31,17 +31,17 @@
 
 :- module(robcog_event_logic,
     [
-        set_ep/0,
-        set_ep/1,
-        get_ep/1,
-        rm_ep/0,
-        class/2,
-        contact/1,
-        contact/3,
-        grasp/1,
-        grasp/2,
-        holds/2,
-        holds/3
+        r_set_ep/0,
+        r_set_ep/1,
+        r_get_ep/1,
+        r_rm_ep/0,
+        r_class/2,
+        r_contact/1,
+        r_contact/3,
+        r_grasp/1,
+        r_grasp/2,
+        r_holds/2,
+        r_holds/3
     ]).
 
 
@@ -70,42 +70,42 @@
     holds(:, +),
     holds(:, ?, ?).
 
-%% set_ep() is nondet.
+%% r_set_ep() is nondet.
 %
 % Sets the current working episode instance
 %
-set_ep :-
+r_set_ep :-
   rdf_has(EpInst, rdf:type, knowrob:'UnrealExperiment'),
   set_ep(EpInst).
 
-%% set_ep(+EpInst) is nondet.
+%% r_set_ep(+EpInst) is nondet.
 %
 % Sets the current working episode instance
 %
 % @param EpInst Identifier of the instance
 %
-set_ep(EpInst) :-
+r_set_ep(EpInst) :-
     nb_setval(ep_inst, EpInst).
 
-%% set_ep(-EpInst) is nondet.
+%% r_get_ep(-EpInst) is nondet.
 %
 % Gets the current working episode instance
 %
 % @param EpInst Identifier of the instance
 %
-get_ep(EpInst) :-
+r_get_ep(EpInst) :-
     nb_getval(ep_inst, EpInst).
 
 
-%% rm_ep(-EpInst) is nondet.
+%% r_rm_ep(-EpInst) is nondet.
 %
 % Remove the current working episode instance
 %
-rm_ep :-
+r_rm_ep :-
     nb_delete(ep_inst).
 
 
-%% unify_time_interval(+StartValue, +EndValue, ?ST, ?ET) is nondet.
+%% r_unify_time_interval(+StartValue, +EndValue, ?ST, ?ET) is nondet.
 %
 % Unifies ST and ET depending on their instantiation (var, nonvar)
 %
@@ -114,7 +114,7 @@ rm_ep :-
 % @param ST Numeric value of the start timepoint to check
 % @param ET Numeric value of the end timepoint to check
 %
-unify_time_interval(StartValue, EndValue, ST, ET) :-
+r_unify_time_interval(StartValue, EndValue, ST, ET) :-
     (   var(ST), var(ET)            % if ST and ET are variables (not inst)
             -> ST = StartValue,     % bind with event time variables
                ET = EndValue
@@ -138,31 +138,31 @@ unify_time_interval(StartValue, EndValue, ST, ET) :-
     ).
 
 
-%% class(?Inst, ?Class) is nondet.
+%% r_class(?Inst, ?Class) is nondet.
 %
 % Gets the type (Class) of the instance
 %
 % @param Inst Identifier of the instance
 % @param Class Identifier of the instance type (Class)
 %
-class(Inst, Class) :-
+r_class(Inst, Class) :-
     rdf_has(Inst, rdf:type, Class),
     not(rdf_equal(Class, owl:'NamedIndividual')).
 
 
-%% contact(?EvInst) is nondet.
+%% r_contact(?EvInst) is nondet.
 %
 % Checks for contact events in the current episode
 %
 % @param EvInst Identifier of the contact instance
 %
-contact(EvInst) :-
+r_contact(EvInst) :-
     get_ep(EpInst),
     rdf_has(EpInst, knowrob:'subAction', EvInst),
     rdf_has(EvInst, rdf:type, knowrob_u:'TouchingSituation').
 
 
-%% contact(?ObjInst1, ?ObjInst2, ?StartEndList) is nondet.
+%% r_contact(?ObjInst1, ?ObjInst2, ?StartEndList) is nondet.
 %
 % Checks for contacts between the two instances
 %
@@ -170,7 +170,7 @@ contact(EvInst) :-
 % @param ObjInst2 Identifier of the second object instance
 % @param StartEndList List of the start and end timepoint [ST, ET]
 %
-contact(ObjInst1, ObjInst2, [ST, ET]) :-
+r_contact(ObjInst1, ObjInst2, [ST, ET]) :-
     contact(EvInst),
     rdf_has(EvInst, knowrob_u:'inContact', ObjInst1),
     rdf_has(EvInst, knowrob_u:'inContact', ObjInst2),
@@ -179,10 +179,10 @@ contact(ObjInst1, ObjInst2, [ST, ET]) :-
     rdf_has(EvInst, knowrob:'endTime', EndInst),
     time_point_value(StartInst, StartValue),
     time_point_value(EndInst, EndValue),
-    unify_time_interval(StartValue, EndValue, ST, ET).
+    r_unify_time_interval(StartValue, EndValue, ST, ET).
 
 
-%% contact(?ObjInst1, ?ObjInst2, +T) is nondet.
+%% r_contact(?ObjInst1, ?ObjInst2, +T) is nondet.
 %
 % Checks for contacts between the two instances
 %
@@ -190,48 +190,48 @@ contact(ObjInst1, ObjInst2, [ST, ET]) :-
 % @param ObjInst2 Identifier of the second object instance
 % @param T Numeric value of the timepoint
 %
-contact(ObjInst1, ObjInst2, T) :-
+r_contact(ObjInst1, ObjInst2, T) :-
     number(T),
     contact(ObjInst1, ObjInst2, [T, T]).
 
 
-%% grasp(?EvInst) is nondet.
+%% r_grasp(?EvInst) is nondet.
 %
 % Checks for grasp events in the current episode
 %
 % @param EvInst Identifier of the grasp instance
 %
-grasp(EvInst) :-
+r_grasp(EvInst) :-
     get_ep(EpInst),
     rdf_has(EpInst, knowrob:'subAction', EvInst),
     rdf_has(EvInst, rdf:type, knowrob:'GraspingSomething').
 
 
-%% grasp(?ObjInst, ?StartEndList) is nondet.
+%% r_grasp(?ObjInst, ?StartEndList) is nondet.
 %
 % Checks for grasp event with start and end time
 %
 % @param ObjInst Identifier of the object instance
 % @param StartEndList List of the start and end timepoint [ST, ET]
 %
-grasp(ObjInst, [ST, ET]) :-
+r_grasp(ObjInst, [ST, ET]) :-
     grasp(EvInst),
     rdf_has(EvInst, knowrob:'objectActedOn', ObjInst),
     rdf_has(EvInst, knowrob:'startTime', StartInst),
     rdf_has(EvInst, knowrob:'endTime', EndInst),
     time_point_value(StartInst, StartValue),
     time_point_value(EndInst, EndValue),
-    unify_time_interval(StartValue, EndValue, ST, ET).
+    r_unify_time_interval(StartValue, EndValue, ST, ET).
 
 
-%% grasp(?ObjInst1, ?ObjInst2, +T) is nondet.
+%% r_grasp(?ObjInst1, ?ObjInst2, +T) is nondet.
 %
 % Checks for grasp event at timepoint
 %
 % @param ObjInst Identifier of the object instance
 % @param T Numeric value of the timepoint
 %
-grasp(ObjInst, T) :-
+r_grasp(ObjInst, T) :-
     number(T),
     grasp(ObjInst, [T, T]).
 
@@ -261,7 +261,7 @@ grasp(ObjInst, T) :-
 % @param ObjClass1 Identifier of the first object class
 % @param ObjClass2 Identifier of the second object class
 %
-holds(contact(ObjClass1, ObjClass2), TStartValue, TEndValue) :-
+r_holds(contact(ObjClass1, ObjClass2), TStartValue, TEndValue) :-
     contact(ObjClass1, ObjClass2, TStartValue, TEndValue).
 
 
@@ -390,6 +390,6 @@ holds(contact(ObjClass1, ObjClass2), TStartValue, TEndValue) :-
 %
 % @param ObjClass Identifier of the grasped object
 %
-holds(grasp(ObjClass), T) :-
+r_holds(grasp(ObjClass), T) :-
     grasp(ObjClass, StartValue, EndValue),
     T >= StartValue, T =< EndValue.
