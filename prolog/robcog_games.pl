@@ -235,7 +235,7 @@ u_load_episodes(Path) :-
     % iterate through all the 1st level entries
     forall(member(CurrEntry, Entries),(
             % check that entries are not special types '..' / '.'
-            (CurrEntry \== '.', CurrEntry \== '..') ->
+            (CurrEntry \== '.', CurrEntry \== '..', CurrEntry \== '.listing') ->
                     % true branch
                     (
                         % add '/' to the entry name and add them to the path
