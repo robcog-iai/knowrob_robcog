@@ -33,6 +33,7 @@
 :- register_ros_package(knowrob_vis).
 % :- register_ros_package(knowrob_meshes).
 %:- register_ros_package(knowrob_objects).
+:- register_ros_package(knowrob_map_data).
 
 :- register_ros_package(knowrob_robcog).
 :- use_module(library('robcog_mongo_interface')).
@@ -45,6 +46,7 @@
 :- rdf_db:rdf_register_ns(owl,    'http://www.w3.org/2002/07/owl#', [keep(true)]).
 :- rdf_db:rdf_register_ns(knowrob, 'http://knowrob.org/kb/knowrob.owl#',  [keep(true)]).
 :- rdf_db:rdf_register_ns(knowrob_u, 'http://knowrob.org/kb/knowrob_u.owl#', [keep(true)]).
+:- rdf_db:rdf_register_ns(knowrob_sherpa, 'http://knowrob.org/kb/knowrob_sherpa.owl#', [keep(true)]).
 :- rdf_db:rdf_register_ns(log, 'http://knowrob.org/kb/unreal_log.owl#', [keep(true)]).
 :- rdf_db:rdf_register_ns(u-map, 'http://knowrob.org/kb/u_map.owl#', [keep(true)]).
 
