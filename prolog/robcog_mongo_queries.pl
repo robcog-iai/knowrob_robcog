@@ -387,3 +387,37 @@ add_rating(EpInst, RatingType, Score, EpisodesPath) :-
     mongo_robcog_query(MongoQuery),
     jpl_call(MongoQuery, 'AddRating',
         [RatingInst, RatingType, Score, FilePath], @void).
+
+%% EEG
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
+% Get the value of the EEG at the timestamp
+% Channel = 1
+eeg_value(Channel, Ts, Value) :-
+    get_ep(EpInst),
+    mongo_robcog_query(MongoQuery),
+    get_mongo_coll_name(EpInst, CollName),
+    set_mongo_coll(CollName),
+    jpl_call(MongoQuery, 'GetEEGValueAt', [Channel, Ts], Value).
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
+% Get the value of the EEG at the timestamp
+% Channel = 1
+eeg_value(EpInst, Channel, Ts, Value) :-
+    mongo_robcog_query(MongoQuery),
+    get_mongo_coll_name(EpInst, CollName),
+    set_mongo_coll(CollName),
+    jpl_call(MongoQuery, 'GetEEGValueAt', [Channel, Ts], Value).
+
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
+% Get the values of the EEG channel between the given timestamps
+% Channel = 1
+% DT = 0.01 (seconds)
+eeg_values(EpInst, Channel, Start, End, DT, Values) :-
+    mongo_robcog_query(MongoQuery),
+    get_mongo_coll_name(EpInst, CollName),
+    set_mongo_coll(CollName),
+    jpl_call(MongoQuery, 'GetEEGValues', [Channel, Start, End, DT], JavaArr),
+    jpl_array_to_list(JavaArr, Values).

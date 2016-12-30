@@ -173,9 +173,45 @@ u_test :-
 
     % u_marker_remove_all.
 
-
 term(type1) :-
   writeln('Type1').
   
 term(type2) :-
   writeln('Type2').
+
+
+% EEG
+
+u_load_eeg :-
+  % load all episodes    
+  u_load_episodes('/home/haidu/Desktop/EEGCleanTable/Episodes'),
+  
+  % load semantic map
+  owl_parse('/home/haidu/Desktop/EEGCleanTable/SemanticMap.owl'),
+
+  % connect to the raw data 
+  connect_to_db('eeg').
+
+
+  
+
+
+%%
+u_test_eeg :-
+
+    %% % get the instance of the current episode
+    ep_inst(EpInst),
+
+    % semantic map instance
+    sem_map_inst(MapInst),
+
+    % db collection names
+    get_mongo_coll_name(EpInst, Coll),
+
+    rdf_has(EpInst, knowrob:startTime, Start),
+    rdf_has(EpInst, knowrob:endTime, End),
+    
+    %actor_traj(EpInst, 'RightHand_yzZp', Start, End, 0.1, ActTraj),
+    eeg_values(EpInst, 1, Start, End, 0.1, EEGValues),
+    eeg_value(EpInst, 1, End, EEGValue).
+

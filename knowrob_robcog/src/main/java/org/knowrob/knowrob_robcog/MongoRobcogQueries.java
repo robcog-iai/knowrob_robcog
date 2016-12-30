@@ -1257,8 +1257,9 @@ public class MongoRobcogQueries {
 		}
 	}
 
-
-    /* EEG */
+    /*****************************************/
+    /*                 EEG                   */
+    /*****************************************/
 
     /**
      * Query the EEG value at the given timepoint (or the most recent one)
@@ -1299,8 +1300,8 @@ public class MongoRobcogQueries {
         DBObject project = new BasicDBObject("$project", proj_fields);
 
         // run aggregation
-        List<DBObject> pipeline = Arrays.asList(time_and_channel, sort_desc, limit_result, project);
-
+        List<DBObject> pipeline = Arrays.asList(match_time_and_channel, sort_desc, limit_result, project);
+        
         AggregationOptions aggregationOptions = AggregationOptions.builder()
                 .batchSize(100)
                 .outputMode(AggregationOptions.OutputMode.CURSOR)
@@ -1365,7 +1366,7 @@ public class MongoRobcogQueries {
         DBObject project = new BasicDBObject("$project", proj_fields);
 
         // run aggregation
-        List<DBObject> pipeline = Arrays.asList(time_and_channel, sort_inc, project);
+        List<DBObject> pipeline = Arrays.asList(match_time_and_channel, sort_inc, project);
 
         AggregationOptions aggregationOptions = AggregationOptions.builder()
                 .batchSize(100)
@@ -1414,7 +1415,7 @@ public class MongoRobcogQueries {
                 // get the current pose
                 traj_list.add(curr_doc.getDouble("eeg"));
                 prev_ts = curr_ts;
-                System.out.println(curr_doc.toString());
+                //System.out.println(curr_doc.toString());
             }
         }
         // close cursor

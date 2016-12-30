@@ -17,6 +17,8 @@ mongoimport --db unreal_test pathtorawdata
 
 ### Examples ###
 
+`See: prolog/robcog_test_queries.pl`
+
 ```
 u_load_episodes('/media/haidu/hdd2TB/logs/unreal').
 
