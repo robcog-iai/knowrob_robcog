@@ -68,7 +68,11 @@
         u_marker_remove/1,
         u_marker_remove_all/0,
 
-        add_rating/4
+        add_rating/4,
+
+        eeg_value/3,
+        eeg_value/4,
+        eeg_values/6
     ]).
 
 :-  rdf_meta

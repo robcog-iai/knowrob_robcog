@@ -31,153 +31,155 @@
 
 :- module(robcog_test_queries,
     [
-    u_export/1,
-    grasp_bowl/4,
-    grasp_spatula/4,
-    u_load/0,
-    u_furniture_test/0,
-    u_test/0,
-    u_test2/0,
-    term/1
+    %% u_export/1,
+    %% grasp_bowl/4,
+    %% grasp_spatula/4,
+    %% u_load/0,
+    %% u_furniture_test/0,
+    %% u_test/0,
+    %% u_test2/0,
+    %% term/1
+    u_load_eeg/0,
+    u_test_eeg/0
     ]).
 
 
-u_export(File) :-
-  open(File, write, Stream, [encoding('ascii')]),
-  rdf_save_header(Stream, [write_xml_base(true)]),
-  rdf_save_footer(Stream),
-  close(Stream).
+%% u_export(File) :-
+%%   open(File, write, Stream, [encoding('ascii')]),
+%%   rdf_save_header(Stream, [write_xml_base(true)]),
+%%   rdf_save_footer(Stream),
+%%   close(Stream).
 
-%%
-grasp_bowl(ExpInst, EventInst, Start, End) :-	
-  % get events which occurred in the episodes
-  u_occurs(ExpInst, EventInst, Start, End),
-  % check for grasping events
-  event_type(EventInst, knowrob:'GraspingSomething'),	
-  % check object acted on
-  acted_on(EventInst, knowrob:'Bowl').
+%% %%
+%% grasp_bowl(ExpInst, EventInst, Start, End) :-	
+%%   % get events which occurred in the episodes
+%%   u_occurs(ExpInst, EventInst, Start, End),
+%%   % check for grasping events
+%%   event_type(EventInst, knowrob:'GraspingSomething'),	
+%%   % check object acted on
+%%   acted_on(EventInst, knowrob:'Bowl').
 
-%%
-grasp_spatula(ExpInst, EventInst, Start, End) :-	
-  % get events which occurred in the episodes
-  u_occurs(ExpInst, EventInst, Start, End),
-  % check for grasping events
-  event_type(EventInst, knowrob:'GraspingSomething'),	
-  % check object acted on
-  acted_on(EventInst, knowrob:'Spatula').
+%% %%
+%% grasp_spatula(ExpInst, EventInst, Start, End) :-	
+%%   % get events which occurred in the episodes
+%%   u_occurs(ExpInst, EventInst, Start, End),
+%%   % check for grasping events
+%%   event_type(EventInst, knowrob:'GraspingSomething'),	
+%%   % check object acted on
+%%   acted_on(EventInst, knowrob:'Spatula').
 
 
-arr_to_list_maplist(Objs, Trajs) :-
-	maplist(jpl_array_to_list, Objs, Trajs).
+%% arr_to_list_maplist(Objs, Trajs) :-
+%% 	maplist(jpl_array_to_list, Objs, Trajs).
 
-%%
-u_load :-
-  % load all episodes    
-  u_load_episodes('/home/haidu/TempLogs/RobCoG/rcg_4/Episodes'),
+%% %%
+%% u_load :-
+%%   % load all episodes    
+%%   u_load_episodes('/home/haidu/TempLogs/RobCoG/rcg_4/Episodes'),
   
-  % load semantic map
-  owl_parse('/home/haidu/TempLogs/RobCoG/rcg_4/SemanticMap.owl'),
+%%   % load semantic map
+%%   owl_parse('/home/haidu/TempLogs/RobCoG/rcg_4/SemanticMap.owl'),
 
-  % connect to the raw data 
-  connect_to_db('RobCoG').
+%%   % connect to the raw data 
+%%   connect_to_db('RobCoG').
 
-%%
-u_furniture_test :-
-  ep_inst(EpInst),
-  % get events which occurred in the episodes
-  u_occurs(EpInst, EventInst, Start, End),
-  % check for open furniture event
-  event_type(EventInst, knowrob_u:'FurnitureStateClosed'), 
-  % check object acted on
-  acted_on(EventInst, knowrob:'FridgeDrawer').
+%% %%
+%% u_furniture_test :-
+%%   ep_inst(EpInst),
+%%   % get events which occurred in the episodes
+%%   u_occurs(EpInst, EventInst, Start, End),
+%%   % check for open furniture event
+%%   event_type(EventInst, knowrob_u:'FurnitureStateClosed'), 
+%%   % check object acted on
+%%   acted_on(EventInst, knowrob:'FridgeDrawer').
 
-%%
-u_test2 :-
-    ep_inst(EpInst),
-    % get events which occurred in the episodes
-    u_occurs(EpInst, EventInst, Start, End),
-    writeln(Start), writeln(End),
-    % check for grasping events
-    event_type(EventInst, knowrob:'GraspingSomething'), 
-    % check object acted on
-    acted_on(EventInst, knowrob:'Bowl').
+%% %%
+%% u_test2 :-
+%%     ep_inst(EpInst),
+%%     % get events which occurred in the episodes
+%%     u_occurs(EpInst, EventInst, Start, End),
+%%     writeln(Start), writeln(End),
+%%     % check for grasping events
+%%     event_type(EventInst, knowrob:'GraspingSomething'), 
+%%     % check object acted on
+%%     acted_on(EventInst, knowrob:'Bowl').
 
-%%
-u_test :-
+%% %%
+%% u_test :-
 
-    %% % get the instance of the current episode
-    ep_inst(EpInst),
+%%     %% % get the instance of the current episode
+%%     ep_inst(EpInst),
 
-    % semantic map instance
-    sem_map_inst(MapInst),
+%%     % semantic map instance
+%%     sem_map_inst(MapInst),
 
-    % db collection names
-    get_mongo_coll_name(EpInst, Coll),
+%%     % db collection names
+%%     get_mongo_coll_name(EpInst, Coll),
 
-    %% % get the hand instance
-    %% rdf_has(HandInst, rdf:type, knowrob:'LeftHand'),
+%%     %% % get the hand instance
+%%     %% rdf_has(HandInst, rdf:type, knowrob:'LeftHand'),
 
-    %% % get name withoug the namespace
-    %% iri_xml_namespace(HandInst, _, HandShortName),    
+%%     %% % get name withoug the namespace
+%%     %% iri_xml_namespace(HandInst, _, HandShortName),    
 
-    u_inst_name(knowrob:'LeftHand', HandShortName),
-    writeln(HandShortName),
+%%     u_inst_name(knowrob:'LeftHand', HandShortName),
+%%     writeln(HandShortName),
 
-    % get the bone names
-    bones_names(EpInst, HandShortName, Bones),
+%%     % get the bone names
+%%     bones_names(EpInst, HandShortName, Bones),
 
-    writeln(Bones),
+%%     writeln(Bones),
 
-    % get episode tag
-    ep_tag(EpInst, EpTag),
-    write('** Episode tag: '), write(EpTag), nl.
+%%     % get episode tag
+%%     ep_tag(EpInst, EpTag),
+%%     write('** Episode tag: '), write(EpTag), nl.
 
-    %% obj_type(ObjInst,  knowrob:'Bowl'),
-    %% rdf_has(ObjInst, rdf:type, ObjType).
+%%     %% obj_type(ObjInst,  knowrob:'Bowl'),
+%%     %% rdf_has(ObjInst, rdf:type, ObjType).
 
-    %% % get events which occurred in the episodes
-    %% u_occurs(EpInst, GraspEventInst, GraspBowlStart, GraspBowlEnd),
-    %% % check for grasping events
-    %% rdf_has(GraspEventInst, rdf:type, knowrob:'GraspingSomething'),
-    %% % check object acted on
-    %% rdf_has(GraspEventInst, knowrob:'objectActedOn', ObjActedOnInst),
-    %% % check object type
-    %% obj_type(ObjActedOnInst, knowrob:'Bowl'),
+%%     %% % get events which occurred in the episodes
+%%     %% u_occurs(EpInst, GraspEventInst, GraspBowlStart, GraspBowlEnd),
+%%     %% % check for grasping events
+%%     %% rdf_has(GraspEventInst, rdf:type, knowrob:'GraspingSomething'),
+%%     %% % check object acted on
+%%     %% rdf_has(GraspEventInst, knowrob:'objectActedOn', ObjActedOnInst),
+%%     %% % check object type
+%%     %% obj_type(ObjActedOnInst, knowrob:'Bowl'),
 
-    %% % get name withoug the namespace
-    %% iri_xml_namespace(ObjActedOnInst, _, ObjShortName),
-    %% writeln(ObjShortName),
-
-
-
-    %actor_traj(EpInst, 'LeftHand', GraspBowlStart, GraspBowlEnd, 0.1, ActTraj).
-    %actor_traj(EpInst, 'LeftHand', 'timepoint_114.054411', 'timepoint_119.054411', 0.1, ActTraj).
-    %view_actor_pose(EpInst, 'LeftHand', GraspBowlStart, 'cube', 'green', 0.1).
-    %view_actor_traj(EpInst, 'LeftHand', GraspBowlStart, GraspBowlEnd, 'h_id1', 'point', 'red', 0.01, 0.01).
-    %view_mesh(EpInst, ObjShortName, GraspBowlStart, 'pipatm_id7', 'package://sim/robcog/Bowl.dae').
-    %view_mesh(EpInst, ObjShortName, GraspBowlStart, 'pipatm_id7', 'package://sim/robcog/LeftHand/pinky_1_l.dae').
-    %view_bones_meshes(EpInst, 'LeftHand', GraspBowlStart, 'pipatm_id8', 'package://sim/robcog/LeftHand/').
-    %view_bones_meshes(EpInst, 'RightHand', GraspBowlStart, 'pipatm_id7', 'package://sim/robcog/RightHand/').
-
-    %bone_traj(EpInst, 'LeftHand', 'pinky_1_l', GraspBowlStart, GraspBowlEnd, 0.1, BoneTraj).
-    %bone_traj(EpInst, 'LeftHand', 'pinky_1_l', 'timepoint_114.054411', 'timepoint_119.054411', 0.1, BoneTraj).
-    %view_bone_traj(EpInst, 'LeftHand','pinky_1_l', GraspBowlStart, GraspBowlEnd, 'h_id15', 'point', 'green', 0.01, 0.01).
-
-    %bones_trajs(EpInst, 'LeftHand', GraspBowlStart, GraspBowlEnd, 0.5, BonesTrajs).
-    %bones_trajs(EpInst, 'LeftHand', 'timepoint_114.054411', 'timepoint_119.054411', 0.5, BonesTrajs).
-    %view_bones_trajs(EpInst, 'RightHand', GraspBowlStart, GraspBowlEnd, 'h_id12', 'point', 'red', 0.01, 0.01).
+%%     %% % get name withoug the namespace
+%%     %% iri_xml_namespace(ObjActedOnInst, _, ObjShortName),
+%%     %% writeln(ObjShortName),
 
 
 
-    % marker_update(object('http://knowrob.org/kb/u_map.owl#USemMap_XkrJ')).
+%%     %actor_traj(EpInst, 'LeftHand', GraspBowlStart, GraspBowlEnd, 0.1, ActTraj).
+%%     %actor_traj(EpInst, 'LeftHand', 'timepoint_114.054411', 'timepoint_119.054411', 0.1, ActTraj).
+%%     %view_actor_pose(EpInst, 'LeftHand', GraspBowlStart, 'cube', 'green', 0.1).
+%%     %view_actor_traj(EpInst, 'LeftHand', GraspBowlStart, GraspBowlEnd, 'h_id1', 'point', 'red', 0.01, 0.01).
+%%     %view_mesh(EpInst, ObjShortName, GraspBowlStart, 'pipatm_id7', 'package://sim/robcog/Bowl.dae').
+%%     %view_mesh(EpInst, ObjShortName, GraspBowlStart, 'pipatm_id7', 'package://sim/robcog/LeftHand/pinky_1_l.dae').
+%%     %view_bones_meshes(EpInst, 'LeftHand', GraspBowlStart, 'pipatm_id8', 'package://sim/robcog/LeftHand/').
+%%     %view_bones_meshes(EpInst, 'RightHand', GraspBowlStart, 'pipatm_id7', 'package://sim/robcog/RightHand/').
 
-    % u_marker_remove_all.
+%%     %bone_traj(EpInst, 'LeftHand', 'pinky_1_l', GraspBowlStart, GraspBowlEnd, 0.1, BoneTraj).
+%%     %bone_traj(EpInst, 'LeftHand', 'pinky_1_l', 'timepoint_114.054411', 'timepoint_119.054411', 0.1, BoneTraj).
+%%     %view_bone_traj(EpInst, 'LeftHand','pinky_1_l', GraspBowlStart, GraspBowlEnd, 'h_id15', 'point', 'green', 0.01, 0.01).
 
-term(type1) :-
-  writeln('Type1').
+%%     %bones_trajs(EpInst, 'LeftHand', GraspBowlStart, GraspBowlEnd, 0.5, BonesTrajs).
+%%     %bones_trajs(EpInst, 'LeftHand', 'timepoint_114.054411', 'timepoint_119.054411', 0.5, BonesTrajs).
+%%     %view_bones_trajs(EpInst, 'RightHand', GraspBowlStart, GraspBowlEnd, 'h_id12', 'point', 'red', 0.01, 0.01).
+
+
+
+%%     % marker_update(object('http://knowrob.org/kb/u_map.owl#USemMap_XkrJ')).
+
+%%     % u_marker_remove_all.
+
+%% term(type1) :-
+%%   writeln('Type1').
   
-term(type2) :-
-  writeln('Type2').
+%% term(type2) :-
+%%   writeln('Type2').
 
 
 % EEG
@@ -201,17 +203,23 @@ u_test_eeg :-
 
     %% % get the instance of the current episode
     ep_inst(EpInst),
+    writeln(EpInst),
 
     % semantic map instance
     sem_map_inst(MapInst),
+    writeln(MapInst),
 
     % db collection names
     get_mongo_coll_name(EpInst, Coll),
+    writeln(Coll),
 
     rdf_has(EpInst, knowrob:startTime, Start),
     rdf_has(EpInst, knowrob:endTime, End),
     
     %actor_traj(EpInst, 'RightHand_yzZp', Start, End, 0.1, ActTraj),
     eeg_values(EpInst, 1, Start, End, 0.1, EEGValues),
-    eeg_value(EpInst, 1, End, EEGValue).
+    writeln(EEGValues),
+    eeg_value(EpInst, 1, End, EEGValue),
+    writeln(EEGValue).
+    
 
