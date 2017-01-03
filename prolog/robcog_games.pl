@@ -42,6 +42,7 @@
         u_occurs/4,
         u_ep_timeline/3,
         u_ep_timeline/4,
+        u_ep_linechart/3,     
         event_type/2,
         obj_type/2,
         obj_mesh/2,
@@ -163,6 +164,15 @@ u_ep_timeline(EpInst, Class, DiagramID, Title) :-
     pairs_keys_values(Events, Contexts, Times), 
     pairs_keys_values(Times, StartTimes, EndTimes),
     add_timeline(DiagramID, Title, Contexts, StartTimes, EndTimes).
+
+% create timeline diagram of the given experiment
+u_ep_linechart(EpInst, DiagramID, Title) :-
+    findall(TC-(ST-ET),
+        (u_occurs(EpInst, EvInst, Start, End), u_task_context(EvInst, TC), time_term(Start, ST), time_term(End, ET)), 
+        Events),
+    pairs_keys_values(Events, Contexts, Times), 
+    pairs_keys_values(Times, StartTimes, EndTimes),
+    add_linechart(DiagramID, Title, Contexts, StartTimes, EndTimes).
 
 % get a given event type
 event_type(EventInst, EventType) :-
