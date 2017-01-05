@@ -217,9 +217,14 @@ u_test_eeg :-
     rdf_has(EpInst, knowrob:endTime, End),
     
     %actor_traj(EpInst, 'RightHand_yzZp', Start, End, 0.1, ActTraj),
-    eeg_values(EpInst, 1, Start, End, 0.1, EEGValues),
-    writeln(EEGValues),
-    eeg_value(EpInst, 1, End, EEGValue),
-    writeln(EEGValue).
+    %eeg_values(EpInst, 1, Start, End, 0.1, EEGValues),
+    %writeln(EEGValues),
+    %eeg_value(EpInst, 1, End, EEGValue),
+    %writeln(EEGValue),
+
+    eeg_all_channels_values(EpInst, Start, End, 0.1, EEGAllValues),
+    writeln(EEGAllValues),
+    eeg_all_channels_value(EpInst, End, EEGAllValue),
+    writeln(EEGAllValue).
     
 

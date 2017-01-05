@@ -1430,5 +1430,187 @@ public class MongoRobcogQueries {
         }
         return traj_arr;
     }
+
+	// ======================== ALL EEG Channels ============================
+
+    /**
+     * Query the all channel EEG values at the given timepoint (or the most recent one)
+     */ 
+    public double[] GetAllEEGValuesAt(String timestampStr){
+        // transform the knowrob time to double with 3 decimal precision
+        final double timestamp = (double) Math.round(parseTime_d(timestampStr) * 1000) / 1000;
+
+        return GetAllEEGValuesAt(timestamp);
+    }
+
+    public double[] GetAllEEGValuesAt(double timestamp){
+        // $and list for querying the $match in the aggregation
+        BasicDBList time_and_channel = new BasicDBList();
+
+        // add the timestamp and the actor name
+        time_and_channel.add(new BasicDBObject("eeg", new BasicDBObject("$exists", true)));
+        time_and_channel.add(new BasicDBObject("timestamp", new BasicDBObject("$lte", timestamp)));
+
+        // create the pipeline operations, first the $match
+        DBObject match_time_and_channel = new BasicDBObject(
+                "$match", new BasicDBObject( "$and", time_and_channel)); 
+
+                // sort the results in descending order on the timestamp (keep most recent result first)
+        DBObject sort_desc = new BasicDBObject(
+                "$sort", new BasicDBObject("timestamp", -1));
+
+        // $limit the result to 1, we only need one pose
+        DBObject limit_result = new BasicDBObject("$limit", 1);
+
+        // build the $projection operation
+        DBObject proj_fields = new BasicDBObject("_id", 0);
+        proj_fields.put("timestamp", 1);
+        proj_fields.put("eeg", "$eeg");        
+        DBObject project = new BasicDBObject("$project", proj_fields);
+
+        // run aggregation
+        List<DBObject> pipeline = Arrays.asList(match_time_and_channel, sort_desc, limit_result, project);
+        
+        AggregationOptions aggregationOptions = AggregationOptions.builder()
+                .batchSize(100)
+                .outputMode(AggregationOptions.OutputMode.CURSOR)
+                .allowDiskUse(true)
+                .build();
+
+        // get results
+        Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
+
+		// if query has a response, return the pose
+		if(cursor.hasNext())
+		{
+			// get the first document as the next cursor and append the metadata to it
+			BasicDBObject first_doc = (BasicDBObject) cursor.next();			
+			// close cursor
+			cursor.close();
+
+			// get all the channels // TODO hardcoded
+			return new double[] {
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c1"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c2"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c3"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c4"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c5"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c6"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c7"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c8"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c9"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c10"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c11"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c12"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c13"),
+					((BasicDBObject) first_doc.get("eeg")).getDouble("c14")};
+		}
+		else
+		{
+			System.out.println("Java - GetAllEEGValuesAt - No results found, returning empty list..");			
+			return new double[0];
+		}
+    }
+
+
+    /**
+     * Query the values of all the EEG channels between the timestamps
+     */
+    public double[][] GetAllEEGValues(String start,
+            String end,
+            double deltaT){
+        // transform the knowrob time to double with 3 decimal precision
+        final double start_ts = (double) Math.round(parseTime_d(start) * 1000) / 1000;
+        final double end_ts = (double) Math.round(parseTime_d(end) * 1000) / 1000;
+
+        // $and list for querying the $match in the aggregation
+        BasicDBList time_and_channel = new BasicDBList();
+
+        // add the timestamp and the actor name
+        time_and_channel.add(new BasicDBObject("eeg", new BasicDBObject("$exists", true)));
+        time_and_channel.add(new BasicDBObject("timestamp", new BasicDBObject("$gte", start_ts).append("$lte", end_ts)));
+
+        // create the pipeline operations, first the $match
+        DBObject match_time_and_channel = new BasicDBObject(
+                "$match", new BasicDBObject( "$and", time_and_channel)); 
+
+                // sort the results in descending order on the timestamp (keep most recent result first)
+        DBObject sort_inc = new BasicDBObject(
+                "$sort", new BasicDBObject("timestamp", 1));
+
+
+        // build the $projection operation
+        DBObject proj_fields = new BasicDBObject("_id", 0);
+        proj_fields.put("timestamp", 1);
+        proj_fields.put("eeg", "$eeg");        
+        DBObject project = new BasicDBObject("$project", proj_fields);
+
+        // run aggregation
+        List<DBObject> pipeline = Arrays.asList(match_time_and_channel, sort_inc, project);
+
+        AggregationOptions aggregationOptions = AggregationOptions.builder()
+                .batchSize(100)
+                .outputMode(AggregationOptions.OutputMode.CURSOR)
+                .allowDiskUse(true)
+                .build();
+
+        // get results
+        Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
+        
+		// Traj as dynamic array
+		ArrayList<double[]> eeg_channels_values = new ArrayList<double[]>();
+		
+		// if the query returned nothing, get the most recent pose
+		if(!cursor.hasNext())
+		{
+			System.out.println("Java - GetAllEEGValues - No results found, returning most recent pose..");
+			// get the most recent pose
+			eeg_channels_values.add(this.GetAllEEGValuesAt(start));
+			
+			// cast from dynamic array to standard array
+			return eeg_channels_values.toArray(new double[eeg_channels_values.size()][14]);	
+		}
+		
+		// timestamp used for deltaT
+		double prev_ts = 0;
+				
+		// while query has a response, return the pose
+		while(cursor.hasNext())
+		{
+			// get the first document as the next cursor and append the metadata to it
+			BasicDBObject curr_doc = (BasicDBObject) cursor.next();
+			
+			// get the curr timestamp
+			double curr_ts = curr_doc.getDouble("timestamp");
+			
+			// if time diff > then deltaT add position to trajectory
+			if(curr_ts - prev_ts > deltaT)
+			{			
+				// get the eeg channel values
+				eeg_channels_values.add(new double[] {
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c1"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c2"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c3"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c4"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c5"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c6"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c7"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c8"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c9"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c10"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c11"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c12"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c13"),
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c14")});
+				prev_ts = curr_ts;
+				//System.out.println(curr_doc.toString());
+			}
+		}
+		// close cursor
+		cursor.close();		
+		
+		// cast from dynamic array to standard array
+		return eeg_channels_values.toArray(new double[eeg_channels_values.size()][14]);
+	}
 }
 
