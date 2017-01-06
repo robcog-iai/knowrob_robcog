@@ -1680,20 +1680,55 @@ public class MongoRobcogQueries {
 		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c4_arr.length]));
 		timestap_values_list.clear();
 
-		/*eeg_channels_values.add(c2_arr);
-		eeg_channels_values.add(c3_arr);
-		eeg_channels_values.add(c4_arr);
-		eeg_channels_values.add(c5_arr);
-		eeg_channels_values.add(c6_arr);
-		eeg_channels_values.add(c7_arr);
-		eeg_channels_values.add(c8_arr);
-		eeg_channels_values.add(c9_arr);
-		eeg_channels_values.add(c10_arr);
-		eeg_channels_values.add(c11_arr);
-		eeg_channels_values.add(c12_arr);
-		eeg_channels_values.add(c13_arr);
-		eeg_channels_values.add(c14_arr);*/
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c5_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c5_arr.length]));
+		timestap_values_list.clear();
 
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c6_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c6_arr.length]));
+		timestap_values_list.clear();
+
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c7_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c7_arr.length]));
+		timestap_values_list.clear();
+
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c8_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c8_arr.length]));
+		timestap_values_list.clear();
+
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c9_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c9_arr.length]));
+		timestap_values_list.clear();
+
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c10_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c10_arr.length]));
+		timestap_values_list.clear();
+
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c11_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c11_arr.length]));
+		timestap_values_list.clear();
+
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c12_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c12_arr.length]));
+		timestap_values_list.clear();
+
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c13_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c13_arr.length]));
+		timestap_values_list.clear();
+
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c14_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c14_arr.length]));
+		timestap_values_list.clear();
 		// close cursor
 		cursor.close();		
 		
