@@ -437,4 +437,18 @@ eeg_all_channels_values(EpInst, Start, End, DT, Values) :-
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'GetAllEEGValues', [Start, End, DT], JavaMultiArr),
     jpl_array_to_list(JavaMultiArr, JavaObjList),
-    maplist(jpl_array_to_list, JavaObjList, Values).
+    maplist(jpl_array_to_list, JavaObjList, ValuesMulti),
+    maplist(maplist_arr_to_list, ValuesMulti, Values).
+
+
+% =================================================================================
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
+% Helper functions
+maplist_arr_to_list(ObjsArr, List) :-
+    maplist(jpl_array_to_list, ObjsArr, List).
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
+% Split pose list into position and quaternion
+u_split_pose(Pose, Pos, Quat) :-
+    [X,Y,Z|Quat] = Pose,
+    Pos = [X,Y,Z].

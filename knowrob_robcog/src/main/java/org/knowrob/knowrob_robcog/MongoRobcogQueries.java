@@ -1516,7 +1516,7 @@ public class MongoRobcogQueries {
     /**
      * Query the values of all the EEG channels between the timestamps
      */
-    public double[][] GetAllEEGValues(String start,
+    public double[][][] GetAllEEGValues(String start,
             String end,
             double deltaT){
         // transform the knowrob time to double with 3 decimal precision
@@ -1558,17 +1558,20 @@ public class MongoRobcogQueries {
         Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
         
 		// Traj as dynamic array
-		ArrayList<double[]> eeg_channels_values = new ArrayList<double[]>();
+		ArrayList<double[][]> eeg_channels_values = new ArrayList<double[][]>();
+
+		ArrayList<double[]> timestap_values_list = new ArrayList<double[]>();
 		
 		// if the query returned nothing, get the most recent pose
 		if(!cursor.hasNext())
 		{
 			System.out.println("Java - GetAllEEGValues - No results found, returning most recent pose..");
 			// get the most recent pose
-			eeg_channels_values.add(this.GetAllEEGValuesAt(start));
+			//eeg_channels_values.add(this.GetAllEEGValuesAt(start));
 			
 			// cast from dynamic array to standard array
-			return eeg_channels_values.toArray(new double[eeg_channels_values.size()][14]);	
+			//return eeg_channels_values.toArray(new double[eeg_channels_values.size()][2][14]);
+			return new double[0][0][0];
 		}
 		
 		// timestamp used for deltaT
@@ -1616,26 +1619,12 @@ public class MongoRobcogQueries {
 				c13.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c13"));
 				c14.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c14"));
 
-				// get the eeg channel values
-				/*eeg_channels_values.add(new double[] {
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c1"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c2"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c3"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c4"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c5"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c6"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c7"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c8"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c9"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c10"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c11"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c12"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c13"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c14")});*/
 				prev_ts = curr_ts;
-				//System.out.println(curr_doc.toString());
 			}
 		}
+
+		double[] ts_arr = new double[]{start_ts, end_ts, deltaT};
+
         // cast from dynamic array to standard array
         // java does not support this, has to be Double (as class)
         //return traj_list.toArray(new double[traj_list.size()]);  
@@ -1670,9 +1659,28 @@ public class MongoRobcogQueries {
 			c13_arr[i] = c13.get(i); 
 			c14_arr[i] = c14.get(i); 
         }
+		
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c1_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c1_arr.length]));
+		timestap_values_list.clear();
 
-		eeg_channels_values.add(c1_arr);
-		eeg_channels_values.add(c2_arr);
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c2_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c2_arr.length]));
+		timestap_values_list.clear();
+
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c3_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c3_arr.length]));
+		timestap_values_list.clear();
+
+		timestap_values_list.add(ts_arr);
+		timestap_values_list.add(c4_arr);
+		eeg_channels_values.add(timestap_values_list.toArray(new double[2][c4_arr.length]));
+		timestap_values_list.clear();
+
+		/*eeg_channels_values.add(c2_arr);
 		eeg_channels_values.add(c3_arr);
 		eeg_channels_values.add(c4_arr);
 		eeg_channels_values.add(c5_arr);
@@ -1684,13 +1692,14 @@ public class MongoRobcogQueries {
 		eeg_channels_values.add(c11_arr);
 		eeg_channels_values.add(c12_arr);
 		eeg_channels_values.add(c13_arr);
-		eeg_channels_values.add(c14_arr);
+		eeg_channels_values.add(c14_arr);*/
 
 		// close cursor
 		cursor.close();		
 		
 		// cast from dynamic array to standard array
-		return eeg_channels_values.toArray(new double[eeg_channels_values.size()][c1_arr.length]);
+		return eeg_channels_values.toArray(
+			new double[eeg_channels_values.size()][timestap_values_list.size()][c1_arr.length]);
 	}
 }
 

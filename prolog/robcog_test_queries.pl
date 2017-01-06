@@ -222,9 +222,9 @@ u_test_eeg :-
     %eeg_value(EpInst, 1, End, EEGValue),
     %writeln(EEGValue),
 
-    eeg_all_channels_values(EpInst, Start, End, 0.1, EEGAllValues),
-    writeln(EEGAllValues),
-    eeg_all_channels_value(EpInst, End, EEGAllValue),
-    writeln(EEGAllValue).
+    eeg_all_channels_values(EpInst, Start, End, 20.1, EEGAllValues),
+    writeln(EEGAllValues).
+    %eeg_all_channels_value(EpInst, End, EEGAllValue),
+    %writeln(EEGAllValue).
     
 
