@@ -1573,7 +1573,22 @@ public class MongoRobcogQueries {
 		
 		// timestamp used for deltaT
 		double prev_ts = 0;
-				
+		
+		ArrayList<Double> c1 = new ArrayList<Double>();
+		ArrayList<Double> c2 = new ArrayList<Double>();
+		ArrayList<Double> c3 = new ArrayList<Double>();
+		ArrayList<Double> c4 = new ArrayList<Double>();
+		ArrayList<Double> c5 = new ArrayList<Double>();
+		ArrayList<Double> c6 = new ArrayList<Double>();
+		ArrayList<Double> c7 = new ArrayList<Double>();
+		ArrayList<Double> c8 = new ArrayList<Double>();
+		ArrayList<Double> c9 = new ArrayList<Double>();
+		ArrayList<Double> c10 = new ArrayList<Double>();
+		ArrayList<Double> c11 = new ArrayList<Double>();
+		ArrayList<Double> c12 = new ArrayList<Double>();
+		ArrayList<Double> c13 = new ArrayList<Double>();
+		ArrayList<Double> c14 = new ArrayList<Double>();
+		
 		// while query has a response, return the pose
 		while(cursor.hasNext())
 		{
@@ -1585,9 +1600,24 @@ public class MongoRobcogQueries {
 			
 			// if time diff > then deltaT add position to trajectory
 			if(curr_ts - prev_ts > deltaT)
-			{			
+			{				
+				c1.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c1"));
+				c2.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c2"));
+				c3.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c3"));
+				c4.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c4"));
+				c5.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c5"));
+				c6.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c6"));
+				c7.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c7"));
+				c8.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c8"));
+				c9.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c9"));
+				c10.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c10"));
+				c11.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c11"));
+				c12.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c12"));
+				c13.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c13"));
+				c14.add(((BasicDBObject) curr_doc.get("eeg")).getDouble("c14"));
+
 				// get the eeg channel values
-				eeg_channels_values.add(new double[] {
+				/*eeg_channels_values.add(new double[] {
 					((BasicDBObject) curr_doc.get("eeg")).getDouble("c1"),
 					((BasicDBObject) curr_doc.get("eeg")).getDouble("c2"),
 					((BasicDBObject) curr_doc.get("eeg")).getDouble("c3"),
@@ -1601,16 +1631,66 @@ public class MongoRobcogQueries {
 					((BasicDBObject) curr_doc.get("eeg")).getDouble("c11"),
 					((BasicDBObject) curr_doc.get("eeg")).getDouble("c12"),
 					((BasicDBObject) curr_doc.get("eeg")).getDouble("c13"),
-					((BasicDBObject) curr_doc.get("eeg")).getDouble("c14")});
+					((BasicDBObject) curr_doc.get("eeg")).getDouble("c14")});*/
 				prev_ts = curr_ts;
 				//System.out.println(curr_doc.toString());
 			}
 		}
+        // cast from dynamic array to standard array
+        // java does not support this, has to be Double (as class)
+        //return traj_list.toArray(new double[traj_list.size()]);  
+        double[] c1_arr = new double[c1.size()];
+        double[] c2_arr = new double[c2.size()];
+        double[] c3_arr = new double[c3.size()];
+        double[] c4_arr = new double[c4.size()];
+        double[] c5_arr = new double[c5.size()];
+        double[] c6_arr = new double[c6.size()];
+        double[] c7_arr = new double[c7.size()];
+        double[] c8_arr = new double[c8.size()];
+        double[] c9_arr = new double[c9.size()];
+        double[] c10_arr = new double[c10.size()];
+        double[] c11_arr = new double[c11.size()];
+        double[] c12_arr = new double[c12.size()];
+        double[] c13_arr = new double[c13.size()];
+        double[] c14_arr = new double[c14.size()];
+
+        for (int i = 0; i < c1.size(); i++) {
+            c1_arr[i] = c1.get(i);                // java 1.5+ style (outboxing)
+			c2_arr[i] = c2.get(i);
+			c3_arr[i] = c3.get(i); 
+			c4_arr[i] = c4.get(i); 
+			c5_arr[i] = c5.get(i); 
+			c6_arr[i] = c6.get(i); 
+			c7_arr[i] = c7.get(i); 
+			c8_arr[i] = c8.get(i); 
+			c9_arr[i] = c9.get(i); 
+			c10_arr[i] = c10.get(i); 
+			c11_arr[i] = c11.get(i); 
+			c12_arr[i] = c12.get(i); 
+			c13_arr[i] = c13.get(i); 
+			c14_arr[i] = c14.get(i); 
+        }
+
+		eeg_channels_values.add(c1_arr);
+		eeg_channels_values.add(c2_arr);
+		eeg_channels_values.add(c3_arr);
+		eeg_channels_values.add(c4_arr);
+		eeg_channels_values.add(c5_arr);
+		eeg_channels_values.add(c6_arr);
+		eeg_channels_values.add(c7_arr);
+		eeg_channels_values.add(c8_arr);
+		eeg_channels_values.add(c9_arr);
+		eeg_channels_values.add(c10_arr);
+		eeg_channels_values.add(c11_arr);
+		eeg_channels_values.add(c12_arr);
+		eeg_channels_values.add(c13_arr);
+		eeg_channels_values.add(c14_arr);
+
 		// close cursor
 		cursor.close();		
 		
 		// cast from dynamic array to standard array
-		return eeg_channels_values.toArray(new double[eeg_channels_values.size()][14]);
+		return eeg_channels_values.toArray(new double[eeg_channels_values.size()][c1_arr.length]);
 	}
 }
 
