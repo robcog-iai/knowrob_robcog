@@ -36,6 +36,7 @@
         show_ep_sem_map/1,
         sem_map_inst/1,
         sem_map_inst/2,
+        show_world_state/2,
         rating_score/3,
         u_task_context/2,
         u_occurs/2,
@@ -77,6 +78,7 @@
 :-  rdf_meta
     u_inst_name(r,r),
     show_ep_sem_map(+),
+    show_world_state(+,+),
     u_ep_timeline(r,r,+,+),
     sem_map_inst(r, r),
     rating_score(r, r, r),
@@ -119,6 +121,19 @@ sem_map_inst(MapInst) :-
 sem_map_inst(EpInst, MapInst) :-
     rdf_has(EpInst, knowrob_u:'semanticMap', MapInst),
     rdf_has(MapInst, rdf:type, knowrob:'SemanticEnvironmentMap').
+
+% Update all the loaded visual marker positions at the given timestamp
+show_world_state(EpInst, Timestamp) :-
+    rdf_has(EpInst, knowrob_u:'semanticMap', MapInst),
+    rdf_has(MapInst, rdf:type, knowrob:'SemanticEnvironmentMap'),
+    findall(_, (
+                marker(object(MarkerTerm), MarkerObject),
+                rdf_split_url(_, ObjectName, MarkerTerm),
+                actor_pose(EpInst, ObjectName, Timestamp, Pose),
+                u_split_pose(Pose, Pos, Quat),
+                marker_pose(MarkerObject, pose(Pos, Quat))
+            ), _).
+
 
 % get the score of the rating
 rating_score(EpInst, RatingType, RatingScore) :- 

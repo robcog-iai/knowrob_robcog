@@ -39,8 +39,8 @@
     %% u_test/0,
     %% u_test2/0,
     %% term/1
-    u_load_eeg/0,
-    u_test_eeg/0
+    load_data/0,
+    test/0
     ]).
 
 
@@ -182,24 +182,24 @@
 %%   writeln('Type2').
 
 
-% EEG
+% 
 
-u_load_eeg :-
+load_data :-
   % load all episodes    
-  u_load_episodes('/home/haidu/Desktop/EEGCleanTable/Episodes'),
+  u_load_episodes('/home/haidu/sandbox/catkin_ws/src/knowrob_robcog/data/Episodes'),
   
   % load semantic map
-  owl_parse('/home/haidu/Desktop/EEGCleanTable/SemanticMap.owl'),
+  owl_parse('/home/haidu/sandbox/catkin_ws/src/knowrob_robcog/data/SemanticMap.owl'),
 
   % connect to the raw data 
-  connect_to_db('eeg').
+  connect_to_db('clean-table').
 
 
   
 
 
 %%
-u_test_eeg :-
+test :-
 
     %% % get the instance of the current episode
     ep_inst(EpInst),
@@ -211,20 +211,9 @@ u_test_eeg :-
 
     % db collection names
     get_mongo_coll_name(EpInst, Coll),
-    writeln(Coll),
+    writeln(Coll).
 
-    rdf_has(EpInst, knowrob:startTime, Start),
-    rdf_has(EpInst, knowrob:endTime, End),
-    
-    %actor_traj(EpInst, 'RightHand_yzZp', Start, End, 0.1, ActTraj),
-    %eeg_values(EpInst, 1, Start, End, 0.1, EEGValues),
-    %writeln(EEGValues),
-    %eeg_value(EpInst, 1, End, EEGValue),
-    %writeln(EEGValue),
+    %rdf_has(EpInst, knowrob:startTime, Start),
+    %rdf_has(EpInst, knowrob:endTime, End).
 
-    eeg_all_channels_values(EpInst, Start, End, 20.1, EEGAllValues),
-    writeln(EEGAllValues).
-    %eeg_all_channels_value(EpInst, End, EEGAllValue),
-    %writeln(EEGAllValue).
-    
 
