@@ -33,7 +33,6 @@
         connect_to_db/1,
         set_mongo_coll/1,
 
-
         actor_pose/3,
         actor_pose/4,
         view_actor_pose/6,
@@ -43,6 +42,9 @@
         view_mesh/5,
         view_bones_meshes/4,
         view_bones_meshes/5,
+
+        actor_traveled_distance/6,
+        actor_traveled_distance_xy/6,
 
         actor_traj/6,
         view_actor_traj/8,
@@ -174,6 +176,26 @@ view_bones_meshes(EpInst, Actor, Ts, MarkerID, MeshFolderPath) :-
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBonesMeshesAt',
         [Actor, Ts, MarkerID, MeshFolderPath], @void).
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
+% Get the distance traveled by the actor between the timestamps
+% Actor = 'LeftHand'
+% DT = 0.01 (seconds)
+actor_traveled_distance(EpInst, Actor, Start, End, DT, Distance) :-
+    mongo_robcog_query(MongoQuery),
+    get_mongo_coll_name(EpInst, CollName),
+    set_mongo_coll(CollName),
+    jpl_call(MongoQuery, 'GetActorTraveledDistance', [Actor, Start, End, DT], Distance).
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
+% Get the distance traveled by the actor in the XY plane between the timestamps
+% Actor = 'LeftHand'
+% DT = 0.01 (seconds)
+actor_traveled_distance_xy(EpInst, Actor, Start, End, DT, Distance) :-
+    mongo_robcog_query(MongoQuery),
+    get_mongo_coll_name(EpInst, CollName),
+    set_mongo_coll(CollName),
+    jpl_call(MongoQuery, 'GetActorXYTraveledDistance', [Actor, Start, End, DT], Distance).
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
 % Get the trajectory of actor at between the given timestamps

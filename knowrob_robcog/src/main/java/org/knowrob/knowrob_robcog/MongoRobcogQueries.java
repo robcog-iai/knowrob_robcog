@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2014-16 by Andrei Haidu
+  Copyright (C) 2014-17 by Andrei Haidu
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
@@ -345,6 +345,9 @@ public class MongoRobcogQueries {
 		return GetActorPoseAt(actorName, timestamp);
 	}
 	
+	/**
+	 * Query the Pose of the actor at the given timepoint (or the most recent one)
+	 */
 	public double[] GetActorPoseAt(String actorName, double timestamp){
 		// $and list for querying the $match in the aggregation
 		BasicDBList time_and_name = new BasicDBList();
@@ -503,6 +506,187 @@ public class MongoRobcogQueries {
 		
 		// cast from dynamic array to standard array
 		return traj_list.toArray(new double[traj_list.size()][7]);
+	}
+
+	
+	/**
+	 * Get the traveled distance of the actor between the given timepoints
+	 */
+	public double GetActorTraveledDistance(String actorName,
+			String start,
+			String end,
+			double deltaT){
+		// traveled distance
+		double traveled_distance = 0.0;		
+		// transform the knowrob time to double with 3 decimal precision
+		final double start_ts = (double) Math.round(parseTime_d(start) * 1000) / 1000;
+		final double end_ts = (double) Math.round(parseTime_d(end) * 1000) / 1000;
+		
+		// create the pipeline operations, first with the $match check the times
+		DBObject match_time = new BasicDBObject("$match", new BasicDBObject("timestamp", 
+				new BasicDBObject("$gte", start_ts).append("$lte", end_ts)));
+
+		// $unwind the actors
+		DBObject unwind_actors = new BasicDBObject("$unwind", "$actors");
+
+		// $match for the given actor name from the unwinded actors
+		DBObject match_actor = new BasicDBObject(
+				"$match", new BasicDBObject("actors.name", actorName));
+
+		// build the $projection operation
+		DBObject proj_fields = new BasicDBObject("_id", 0);
+		proj_fields.put("timestamp", 1);
+		proj_fields.put("pos", "$actors.pos");
+		proj_fields.put("rot", "$actors.rot");
+		DBObject project = new BasicDBObject("$project", proj_fields);
+
+		// run aggregation
+		List<DBObject> pipeline = Arrays.asList(match_time, unwind_actors, match_actor, project);
+
+		AggregationOptions aggregationOptions = AggregationOptions.builder()
+				.batchSize(100)
+				.outputMode(AggregationOptions.OutputMode.CURSOR)
+				.allowDiskUse(true)
+				.build();
+
+		// get results
+		Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
+		
+		// Traj as dynamic array
+		List<double[]> traj_list_xyz = new ArrayList<double[]>();
+		
+		// if the query returned nothing distance is 0.
+		if(!cursor.hasNext())
+		{
+			System.out.println("Java - GetActorXYTraveledDistance - No results found, returning 0.0 ..");
+			return traveled_distance;	
+		}
+		
+		// timestamp used for deltaT
+		double prev_ts = 0;
+				
+		// while query has a response, return the pose
+		while(cursor.hasNext())
+		{
+			// get the first document as the next cursor and append the metadata to it
+			BasicDBObject curr_doc = (BasicDBObject) cursor.next();
+			
+			// get the curr timestamp
+			double curr_ts = curr_doc.getDouble("timestamp");
+			
+			// if time diff > then deltaT add position to trajectory
+			if(curr_ts - prev_ts > deltaT)
+			{			
+				// get the current pose
+				traj_list_xyz.add(new double[] {
+						((BasicDBObject) curr_doc.get("pos")).getDouble("x"),
+						((BasicDBObject) curr_doc.get("pos")).getDouble("y"),
+						((BasicDBObject) curr_doc.get("pos")).getDouble("z")});
+				prev_ts = curr_ts;
+				//System.out.println(curr_doc.toString());
+			}
+		}
+		// close cursor
+		cursor.close();
+		
+		// Iterate and calculate the 3D points distance backwards until the second last point
+		for (int i = traj_list_xyz.size() - 1 ; i >= 1 ; i--) {			
+			final double x1_x0 = traj_list_xyz.get(i)[0] - traj_list_xyz.get(i-1)[0];
+			final double y1_y0 = traj_list_xyz.get(i)[1] - traj_list_xyz.get(i-1)[1];
+			final double z1_z0 = traj_list_xyz.get(i)[2] - traj_list_xyz.get(i-1)[2];
+			traveled_distance += Math.sqrt((x1_x0 * x1_x0) + (y1_y0 * y1_y0) + (z1_z0 * z1_z0));
+		}
+		
+		return traveled_distance;
+	}
+		
+	/**
+	 * Get the traveled distance on the XY plane of the actor between the given timepoints
+	 */
+	public double GetActorXYTraveledDistance(String actorName,
+			String start,
+			String end,
+			double deltaT){
+		// traveled distance
+		double traveled_distance = 0.0;		
+		// transform the knowrob time to double with 3 decimal precision
+		final double start_ts = (double) Math.round(parseTime_d(start) * 1000) / 1000;
+		final double end_ts = (double) Math.round(parseTime_d(end) * 1000) / 1000;
+		
+		// create the pipeline operations, first with the $match check the times
+		DBObject match_time = new BasicDBObject("$match", new BasicDBObject("timestamp", 
+				new BasicDBObject("$gte", start_ts).append("$lte", end_ts)));
+
+		// $unwind the actors
+		DBObject unwind_actors = new BasicDBObject("$unwind", "$actors");
+
+		// $match for the given actor name from the unwinded actors
+		DBObject match_actor = new BasicDBObject(
+				"$match", new BasicDBObject("actors.name", actorName));
+
+		// build the $projection operation
+		DBObject proj_fields = new BasicDBObject("_id", 0);
+		proj_fields.put("timestamp", 1);
+		proj_fields.put("pos", "$actors.pos");
+		proj_fields.put("rot", "$actors.rot");
+		DBObject project = new BasicDBObject("$project", proj_fields);
+
+		// run aggregation
+		List<DBObject> pipeline = Arrays.asList(match_time, unwind_actors, match_actor, project);
+
+		AggregationOptions aggregationOptions = AggregationOptions.builder()
+				.batchSize(100)
+				.outputMode(AggregationOptions.OutputMode.CURSOR)
+				.allowDiskUse(true)
+				.build();
+
+		// get results
+		Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
+		
+		// Traj as dynamic array
+		List<double[]> traj_list_xy = new ArrayList<double[]>();
+		
+		// if the query returned nothing distance is 0.
+		if(!cursor.hasNext())
+		{
+			System.out.println("Java - GetActorXYTraveledDistance - No results found, returning 0.0 ..");
+			return traveled_distance;	
+		}
+		
+		// timestamp used for deltaT
+		double prev_ts = 0;
+				
+		// while query has a response, return the pose
+		while(cursor.hasNext())
+		{
+			// get the first document as the next cursor and append the metadata to it
+			BasicDBObject curr_doc = (BasicDBObject) cursor.next();
+			
+			// get the curr timestamp
+			double curr_ts = curr_doc.getDouble("timestamp");
+			
+			// if time diff > then deltaT add position to trajectory
+			if(curr_ts - prev_ts > deltaT)
+			{			
+				// get the current pose
+				traj_list_xy.add(new double[] {
+						((BasicDBObject) curr_doc.get("pos")).getDouble("x"),
+						((BasicDBObject) curr_doc.get("pos")).getDouble("y")});
+				prev_ts = curr_ts;
+				//System.out.println(curr_doc.toString());
+			}
+		}
+		// close cursor
+		cursor.close();
+		
+		// Iterate and calculate the 2D points distance backwards until the second last point
+		for (int i = traj_list_xy.size() - 1 ; i >= 1 ; i--) {			
+			final double x1_x0 = traj_list_xy.get(i)[0] - traj_list_xy.get(i-1)[0];
+			final double y1_y0 = traj_list_xy.get(i)[1] - traj_list_xy.get(i-1)[1];			
+			traveled_distance += Math.sqrt((x1_x0 * x1_x0) + (y1_y0 * y1_y0));
+		}
+		
+		return traveled_distance;
 	}
 	
 	/**
@@ -1737,4 +1921,5 @@ public class MongoRobcogQueries {
 			new double[eeg_channels_values.size()][timestap_values_list.size()][c1_arr.length]);
 	}
 }
+
 
