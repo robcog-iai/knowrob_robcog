@@ -70,6 +70,9 @@ public class MongoRobcogQueries {
 	// marker unique ids
 	private Deque<String> markerIDs;
 	
+	// marker unique ids
+	private Deque<String> skeletalMeshMarkerIDs;
+	
 	// unreal connection to mongodb
 	private MongoRobcogConn MongoRobcogConn;
 
@@ -315,6 +318,43 @@ public class MongoRobcogQueries {
 	}
 	
 	/**
+	 * Create the bones rviz mesh marker
+	 */
+	public void CreateSkeletalMeshMarkers(
+			double[][] poses,
+			String[] names,
+			String markerID,
+			String meshFolderPath){
+		// create marker for every link mesh
+		for (int i = 0; i < names.length; ++i)
+		{
+			// split pose into translation and orientation
+			final double[] translation = new double[] {poses[i][0], poses[i][1], poses[i][2]};
+			final double[] orientation = new double[] {poses[i][3], poses[i][4], poses[i][5], poses[i][6]};
+			
+			final String curr_name = names[i];
+			final String curr_id = markerID + curr_name;
+			// check if marker already exists (ID + link names)
+			MarkerObject m = MarkerPublisher.get().getMarker(curr_id);
+			if(m==null) {
+				// create marker
+				m = MarkerPublisher.get().createMarker(curr_id);
+				// set the type of the marker
+				m.setType(Marker.MESH_RESOURCE);
+				// set the path to the mesh
+				m.setMeshResource(meshFolderPath + curr_name + ".dae");
+				// set pos and rotation
+				m.setTranslation(translation);
+				m.setOrientation(orientation);
+				// set scale
+				m.setScale(new float[] {1.0f,1.0f,1.0f});
+			}
+			// add ID to the marker container
+			this.skeletalMeshMarkerIDs.add(curr_id);		
+		}
+	}
+	
+	/**
 	 * Remove the rviz marker with the given ID
 	 */
 	public void RemoveMarker(String markerID){
@@ -331,7 +371,17 @@ public class MongoRobcogQueries {
                 this.RemoveMarker((String)m_itr.next());
         }
 	}
-
+	
+	/**
+	 * Remove all skeletal mesh rviz markers created form sg
+	 */
+	public void RemoveAllSkeletalMeshMarkers(){
+		// Iterate and remove all markers
+        Iterator m_itr = this.skeletalMeshMarkerIDs.iterator();
+        while (m_itr.hasNext()) {
+                this.RemoveMarker((String)m_itr.next());
+        }
+	}
 	
 	////////////////////////////////////////////////////////////////
 	///// GET QUERY FUNCTIONS
@@ -553,7 +603,7 @@ public class MongoRobcogQueries {
 		Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
 		
 		// Traj as dynamic array
-		List<double[]> traj_list_xyz = new ArrayList<double[]>();
+		List<double[]> traj_list_xy = new ArrayList<double[]>();
 		
 		// if the query returned nothing distance is 0.
 		if(!cursor.hasNext())
@@ -578,7 +628,7 @@ public class MongoRobcogQueries {
 			if(curr_ts - prev_ts > deltaT)
 			{			
 				// get the current pose
-				traj_list_xyz.add(new double[] {
+				traj_list_xy.add(new double[] {
 						((BasicDBObject) curr_doc.get("pos")).getDouble("x"),
 						((BasicDBObject) curr_doc.get("pos")).getDouble("y"),
 						((BasicDBObject) curr_doc.get("pos")).getDouble("z")});
@@ -590,10 +640,10 @@ public class MongoRobcogQueries {
 		cursor.close();
 		
 		// Iterate and calculate the 3D points distance backwards until the second last point
-		for (int i = traj_list_xyz.size() - 1 ; i >= 1 ; i--) {			
-			final double x1_x0 = traj_list_xyz.get(i)[0] - traj_list_xyz.get(i-1)[0];
-			final double y1_y0 = traj_list_xyz.get(i)[1] - traj_list_xyz.get(i-1)[1];
-			final double z1_z0 = traj_list_xyz.get(i)[2] - traj_list_xyz.get(i-1)[2];
+		for (int i = traj_list_xy.size() - 1 ; i >= 1 ; i--) {			
+			final x1_x0 = traj_list_xy.get(i)[0] - traj_list_xy.get(i-1)[0];
+			final y1_y0 = traj_list_xy.get(i)[1] - traj_list_xy.get(i-1)[1];
+			final z1_z0 = traj_list_xy.get(i)[2] - traj_list_xy.get(i-1)[2];
 			traveled_distance += Math.sqrt((x1_x0 * x1_x0) + (y1_y0 * y1_y0) + (z1_z0 * z1_z0));
 		}
 		
@@ -681,8 +731,8 @@ public class MongoRobcogQueries {
 		
 		// Iterate and calculate the 2D points distance backwards until the second last point
 		for (int i = traj_list_xy.size() - 1 ; i >= 1 ; i--) {			
-			final double x1_x0 = traj_list_xy.get(i)[0] - traj_list_xy.get(i-1)[0];
-			final double y1_y0 = traj_list_xy.get(i)[1] - traj_list_xy.get(i-1)[1];			
+			final x1_x0 = traj_list_xy.get(i)[0] - traj_list_xy.get(i-1)[0];
+			final y1_y0 = traj_list_xy.get(i)[1] - traj_list_xy.get(i-1)[1];			
 			traveled_distance += Math.sqrt((x1_x0 * x1_x0) + (y1_y0 * y1_y0));
 		}
 		
@@ -1921,5 +1971,4 @@ public class MongoRobcogQueries {
 			new double[eeg_channels_values.size()][timestap_values_list.size()][c1_arr.length]);
 	}
 }
-
 
