@@ -166,6 +166,32 @@ u_ep_timeline(EpInst, DiagramID, Title) :-
     pairs_keys_values(Times, StartTimes, EndTimes),
     add_timeline(DiagramID, Title, Contexts, StartTimes, EndTimes).
 
+% create timeline diagram of the given experiment
+u_ep_timeline(EpInst, all, DiagramID, Title) :-
+    findall(TC-(ST-ET),
+        (u_occurs(EpInst, EvInst, Start, End), u_task_context(EvInst, TC), time_term(Start, ST), time_term(End, ET)), 
+        Events),
+    pairs_keys_values(Events, Contexts, Times), 
+    pairs_keys_values(Times, StartTimes, EndTimes),
+    add_timeline(DiagramID, Title, Contexts, StartTimes, EndTimes).
+
+% create timeline diagram of the given experiment
+u_ep_timeline(EpInst, ignore-uninterrupted, DiagramID, Title) :-
+    findall(TC-(ST-ET),
+        (
+            u_occurs(EpInst, EvInst, Start, End),
+            u_task_context(EvInst, TC),
+            time_term(Start, ST),
+            time_term(End, ET)
+            %rdf_has(EpInst, knowrob:'startTime', Start),
+            %rdf_has(EpInst, knowrob:'endTime', End),
+        ), 
+        Events),
+
+    pairs_keys_values(Events, Contexts, Times), 
+    pairs_keys_values(Times, StartTimes, EndTimes),
+    add_timeline(DiagramID, Title, Contexts, StartTimes, EndTimes).    
+
 % create timeline diagram of the given experiment with of the given class
 % e.g Class = knowrob_u:'TouchingSituation'
 u_ep_timeline(EpInst, Class, DiagramID, Title) :-
