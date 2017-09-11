@@ -125,9 +125,11 @@ sem_map_inst(EpInst, MapInst) :-
 % Update all the loaded visual marker positions at the given timestamp
 show_world_state(EpInst, Timestamp) :-
     findall(_, (
-                marker(object(MarkerTerm), MarkerObject),
-                rdf_split_url(_, ObjectName, MarkerTerm),
-                actor_pose(EpInst, ObjectName, Timestamp, Pose),
+                rdf_has(DynamicEntity, knowrob_u:'dynamicEntity', literal(type(xsd:boolean, '1'))),
+                marker(object(DynamicEntity), MarkerObject),
+                % rdf_has(DynamicEntity, knowrob_u:'dynamicEntity', literal(type(xsd:boolean, '1'))),
+                rdf_split_url(_, EntityName, DynamicEntity),
+                actor_pose(EpInst, EntityName, Timestamp, Pose),
                 u_split_pose(Pose, Pos, Quat),
                 marker_pose(MarkerObject, pose(Pos, Quat))
             ), _).

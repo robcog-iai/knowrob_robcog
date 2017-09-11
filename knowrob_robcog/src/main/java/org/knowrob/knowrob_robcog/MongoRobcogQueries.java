@@ -88,6 +88,7 @@ public class MongoRobcogQueries {
 		
 		// init marker array ids
 		this.markerIDs = new ArrayDeque<String>();
+		this.skeletalMeshMarkerIDs = new ArrayDeque<String>();
 	}
 	
 	/**
@@ -99,6 +100,7 @@ public class MongoRobcogQueries {
 		
 		// init marker array ids
 		this.markerIDs = new ArrayDeque<String>();
+		this.skeletalMeshMarkerIDs = new ArrayDeque<String>();
 	}
 	
 	
@@ -388,7 +390,7 @@ public class MongoRobcogQueries {
 	/**
 	 * Query the Pose of the actor at the given timepoint (or the most recent one)
 	 */
-	public double[] GetActorPoseAt(String actorName,  String timestampStr){
+	public double[] GetActorPoseAt(String actorName, String timestampStr){
 		// transform the knowrob time to double with 3 decimal precision
 		final double timestamp = (double) Math.round(parseTime_d(timestampStr) * 1000) / 1000;
 
@@ -479,9 +481,19 @@ public class MongoRobcogQueries {
 		final double start_ts = (double) Math.round(parseTime_d(start) * 1000) / 1000;
 		final double end_ts = (double) Math.round(parseTime_d(end) * 1000) / 1000;
 		
+		return GetActorTraj(actorName, start_ts, end_ts, deltaT);
+	}
+	
+	/**
+	 * Query the Traj of the actor between the given timepoints
+	 */
+	public double[][] GetActorTraj(String actorName,
+			double start,
+			double end,
+			double deltaT){
 		// create the pipeline operations, first with the $match check the times
 		DBObject match_time = new BasicDBObject("$match", new BasicDBObject("timestamp", 
-				new BasicDBObject("$gte", start_ts).append("$lte", end_ts)));
+				new BasicDBObject("$gte", start).append("$lte", end)));
 
 		// $unwind the actors
 		DBObject unwind_actors = new BasicDBObject("$unwind", "$actors");
@@ -557,7 +569,6 @@ public class MongoRobcogQueries {
 		// cast from dynamic array to standard array
 		return traj_list.toArray(new double[traj_list.size()][7]);
 	}
-
 	
 	/**
 	 * Get the traveled distance of the actor between the given timepoints
@@ -566,15 +577,26 @@ public class MongoRobcogQueries {
 			String start,
 			String end,
 			double deltaT){
-		// traveled distance
-		double traveled_distance = 0.0;		
 		// transform the knowrob time to double with 3 decimal precision
 		final double start_ts = (double) Math.round(parseTime_d(start) * 1000) / 1000;
 		final double end_ts = (double) Math.round(parseTime_d(end) * 1000) / 1000;
+
+		return GetActorTraveledDistance(actorName, start_ts, end_ts, deltaT);
+	}
+		
+	/**
+	 * Get the traveled distance of the actor between the given timepoints
+	 */
+	public double GetActorTraveledDistance(String actorName,
+			double start,
+			double end,
+			double deltaT){
+		// traveled distance
+		double traveled_distance = 0.0;		
 		
 		// create the pipeline operations, first with the $match check the times
 		DBObject match_time = new BasicDBObject("$match", new BasicDBObject("timestamp", 
-				new BasicDBObject("$gte", start_ts).append("$lte", end_ts)));
+				new BasicDBObject("$gte", start).append("$lte", end)));
 
 		// $unwind the actors
 		DBObject unwind_actors = new BasicDBObject("$unwind", "$actors");
@@ -649,7 +671,7 @@ public class MongoRobcogQueries {
 		
 		return traveled_distance;
 	}
-		
+	
 	/**
 	 * Get the traveled distance on the XY plane of the actor between the given timepoints
 	 */
@@ -657,15 +679,26 @@ public class MongoRobcogQueries {
 			String start,
 			String end,
 			double deltaT){
-		// traveled distance
-		double traveled_distance = 0.0;		
 		// transform the knowrob time to double with 3 decimal precision
 		final double start_ts = (double) Math.round(parseTime_d(start) * 1000) / 1000;
 		final double end_ts = (double) Math.round(parseTime_d(end) * 1000) / 1000;
 		
+		return GetActorXYTraveledDistance(actorName, start_ts, end_ts, deltaT);
+	}
+	
+	/**
+	 * Get the traveled distance on the XY plane of the actor between the given timepoints
+	 */
+	public double GetActorXYTraveledDistance(String actorName,
+			double start,
+			double end,
+			double deltaT){
+		// traveled distance
+		double traveled_distance = 0.0;		
+		
 		// create the pipeline operations, first with the $match check the times
 		DBObject match_time = new BasicDBObject("$match", new BasicDBObject("timestamp", 
-				new BasicDBObject("$gte", start_ts).append("$lte", end_ts)));
+				new BasicDBObject("$gte", start).append("$lte", end)));
 
 		// $unwind the actors
 		DBObject unwind_actors = new BasicDBObject("$unwind", "$actors");
@@ -744,7 +777,13 @@ public class MongoRobcogQueries {
 	 */
 	public double[] GetBonePoseAt(String actorName, String boneName, String timestampStr){
 		final double timestamp = (double) Math.round(parseTime_d(timestampStr) * 1000) / 1000;
-		
+		return GetBonePoseAt(actorName, boneName, timestamp);
+	}
+	
+	/**
+	 * Query the Pose of the actors bone at the given timepoint (or the most recent one)
+	 */
+	public double[] GetBonePoseAt(String actorName, String boneName, double timestamp){		
 		// $and list for querying the $match in the aggregation
 		BasicDBList time_and_name = new BasicDBList();
 
@@ -840,10 +879,22 @@ public class MongoRobcogQueries {
 		// transform the knowrob time to double with 3 decimal precision
 		final double start_ts = (double) Math.round(parseTime_d(start) * 1000) / 1000;
 		final double end_ts = (double) Math.round(parseTime_d(end) * 1000) / 1000;
+
+		return GetBoneTraj(actorName, boneName, start_ts, end_ts, deltaT);
+	}
+	
+	/**
+	 * Query the Traj of the actors bone between the given timepoints
+	 */
+	public double [][] GetBoneTraj(String actorName,
+			String boneName,
+			double start,
+			double end,
+			double deltaT){		
 		
 		// create the pipeline operations, first with the $match check the times
 		DBObject match_time = new BasicDBObject("$match", new BasicDBObject("timestamp", 
-				new BasicDBObject("$gte", start_ts).append("$lte", end_ts)));
+				new BasicDBObject("$gte", start).append("$lte", end)));
 
 		// $unwind the actors
 		DBObject unwind_actors = new BasicDBObject("$unwind", "$actors");
@@ -982,6 +1033,14 @@ public class MongoRobcogQueries {
 	public double[][] GetBonesPosesAt(String actorName, String timestampStr){
 		// transform the knowrob time to double with 3 decimal precision
 		final double timestamp = (double) Math.round(parseTime_d(timestampStr) * 1000) / 1000;
+
+		return GetBonesPosesAt(actorName, timestamp);
+	}
+	
+	/**
+	 * Query the Poses of the actor bones at the given timepoint (or the most recent one)
+	 */
+	public double[][] GetBonesPosesAt(String actorName, double timestamp){
 		
 		// $and list for querying the $match in the aggregation
 		BasicDBList time_and_name = new BasicDBList();
@@ -1076,9 +1135,20 @@ public class MongoRobcogQueries {
 		// transform the knowrob time to double with 3 decimal precision
 		final double start_ts = (double) Math.round(parseTime_d(start) * 1000) / 1000;
 		final double end_ts = (double) Math.round(parseTime_d(end) * 1000) / 1000;
+
+		return GetBonesTrajs(actorName, start_ts, end_ts, deltaT);
+	}
+
+	/**
+	 * Query the Trajectories of the actor bones at the given timepoint (or the most recent one)
+	 */
+	public double[][][] GetBonesTrajs(String actorName,
+			double start,
+			double end,
+			double deltaT){	
 		// create the pipeline operations, first with the $match check the times
 		DBObject match_time = new BasicDBObject("$match", new BasicDBObject("timestamp", 
-				new BasicDBObject("$gte", start_ts).append("$lte", end_ts)));
+				new BasicDBObject("$gte", start).append("$lte", end)));
 
 		// $unwind actors in order to output only the queried actor
 		DBObject unwind_actors = new BasicDBObject("$unwind", "$actors");
@@ -1175,7 +1245,6 @@ public class MongoRobcogQueries {
 		// return the actor bones trajectories as float[][][] 
 		return bone_trajs.toArray(new double[bone_trajs.size()][nr_bones][7]);
 	}
-
 	
 	////////////////////////////////////////////////////////////////
 	///// VIS QUERY FUNCTIONS	
@@ -1193,6 +1262,23 @@ public class MongoRobcogQueries {
 		this.ViewActorPoseAt(actorName, timestampStr, marker_id, markerType, color, scale);
 	}
 	
+	/**
+	 * View and return the Pose of the actor at the given timepoint (or the most recent one)
+	 */
+	public void ViewActorPoseAt(String actorName, 
+			double timestamp,
+			String markerType,
+			String color,
+			float scale){
+		// gen id
+		final String marker_id = actorName + "_" + this.randString(4);
+		// create the marker
+		this.ViewActorPoseAt(actorName, timestamp, marker_id, markerType, color, scale);
+	}
+	
+	/**
+	 * View and return the Pose of the actor at the given timepoint (or the most recent one)
+	 */
 	public void ViewActorPoseAt(String actorName, 
 			String timestampStr, 
 			String markerID,
@@ -1201,6 +1287,26 @@ public class MongoRobcogQueries {
 			float scale){
 		// get the pose of the actor
 		final double[] pose = this.GetActorPoseAt(actorName, timestampStr);
+	
+		// return position as arraylist
+		ArrayList<Vector3d> pos = new ArrayList<Vector3d>();
+		pos.add(new Vector3d(pose[0],pose[1],pose[2]));
+		
+		// create the marker
+		this.CreateMarkers(pos, markerID, markerType, color, scale);
+	}
+	
+	/**
+	 * View and return the Pose of the actor at the given timepoint (or the most recent one)
+	 */
+	public void ViewActorPoseAt(String actorName, 
+			double timestamp, 
+			String markerID,
+			String markerType,
+			String color,
+			float scale){
+		// get the pose of the actor
+		final double[] pose = this.GetActorPoseAt(actorName, timestamp);
 	
 		// return position as arraylist
 		ArrayList<Vector3d> pos = new ArrayList<Vector3d>();
@@ -1228,11 +1334,39 @@ public class MongoRobcogQueries {
 	 * view results as rviz mesh marker 
 	 */
 	public void ViewActorMeshAt(String actorName,			
+			double timestamp,
+			String meshPath){
+		// gen id
+		final String marker_id = actorName + "_" + this.randString(4);
+		// create the marker
+		this.ViewActorMeshAt(actorName, timestamp, marker_id, meshPath);
+	}
+	
+	/**
+	 * Query the Pose of the given model at the given timepoint (or the most recent one)
+	 * view results as rviz mesh marker 
+	 */
+	public void ViewActorMeshAt(String actorName,			
 			String timestampStr, 
 			String markerID,
 			String meshPath){
 		// get the pose of the actor
 		final double[] pose = this.GetActorPoseAt(actorName, timestampStr);
+		
+		// create mesh marker
+		this.CreateMeshMarker(pose, markerID, meshPath);
+	}
+	
+	/**
+	 * Query the Pose of the given model at the given timepoint (or the most recent one)
+	 * view results as rviz mesh marker 
+	 */
+	public void ViewActorMeshAt(String actorName,			
+			double timestamp, 
+			String markerID,
+			String meshPath){
+		// get the pose of the actor
+		final double[] pose = this.GetActorPoseAt(actorName, timestamp);
 		
 		// create mesh marker
 		this.CreateMeshMarker(pose, markerID, meshPath);
@@ -1249,6 +1383,19 @@ public class MongoRobcogQueries {
 		final String marker_id = actorName + "_" + this.randString(4);
 		// create the marker
 		this.ViewBonesMeshesAt(actorName, timestampStr, marker_id, meshFolderPath);
+	}
+	
+	/**
+	 * Get the poses of the actorss bones meshes at the given timestamp
+	 * view results as rviz markers
+	 */
+	public void ViewBonesMeshesAt(String actorName,
+			double timestamp,
+			String meshFolderPath){	
+		// gen id
+		final String marker_id = actorName + "_" + this.randString(4);
+		// create the marker
+		this.ViewBonesMeshesAt(actorName, timestamp, marker_id, meshFolderPath);
 	}
 	
 	/**
@@ -1273,6 +1420,24 @@ public class MongoRobcogQueries {
 	 * Get the poses of the actorss bones meshes at the given timestamp
 	 * view results as rviz markers
 	 */
+	public void ViewBonesMeshesAt(String actorName,
+			double timestamp,
+			String markerID,
+			String meshFolderPath){		
+		// get the names of the bones
+		final String[] names = this.GetBonesNames(actorName); 
+	
+		// pos xyz rot wxyz for every bone
+		final double[][] bone_poses = this.GetBonesPosesAt(actorName, timestamp);
+
+		// create the bones mesh markers
+		this.CreateBonesMeshMarkers(bone_poses, names, markerID, meshFolderPath);
+	}
+	
+	/**
+	 * Get the poses of the actorss bones meshes at the given timestamp
+	 * view results as rviz markers
+	 */
 	public void ViewSkeletalMeshAt(String actorName,
 			String timestampStr,
 			String meshFolderPath){	
@@ -1280,6 +1445,19 @@ public class MongoRobcogQueries {
 		final String marker_id = actorName + "_" + this.randString(4);
 		// create the marker
 		this.ViewSkeletalMeshAt(actorName, timestampStr, marker_id, meshFolderPath);
+	}
+	
+	/**
+	 * Get the poses of the actorss bones meshes at the given timestamp
+	 * view results as rviz markers
+	 */
+	public void ViewSkeletalMeshAt(String actorName,
+			double timestamp,
+			String meshFolderPath){	
+		// gen id
+		final String marker_id = actorName + "_" + this.randString(4);
+		// create the marker
+		this.ViewSkeletalMeshAt(actorName, timestamp, marker_id, meshFolderPath);
 	}
 	
 	/**
@@ -1295,6 +1473,24 @@ public class MongoRobcogQueries {
 	
 		// pos xyz rot wxyz for every bone
 		final double[][] bone_poses = this.GetBonesPosesAt(actorName, timestampStr);
+
+		// create the bones mesh markers
+		this.CreateSkeletalMeshMarkers(bone_poses, names, markerID, meshFolderPath);
+	}
+	
+	/**
+	 * Get the poses of the actorss bones meshes at the given timestamp
+	 * view results as rviz markers
+	 */
+	public void ViewSkeletalMeshAt(String actorName,
+			double timestamp,
+			String markerID,
+			String meshFolderPath){		
+		// get the names of the bones
+		final String[] names = this.GetBonesNames(actorName); 
+	
+		// pos xyz rot wxyz for every bone
+		final double[][] bone_poses = this.GetBonesPosesAt(actorName, timestamp);
 
 		// create the bones mesh markers
 		this.CreateSkeletalMeshMarkers(bone_poses, names, markerID, meshFolderPath);
@@ -1320,6 +1516,21 @@ public class MongoRobcogQueries {
 	 */
 	public void ViewBonePoseAt(String actorName,
 			String boneName,
+			double timestamp,
+			String markerType,
+			String color,
+			float scale){	
+		// gen id
+		final String marker_id = boneName + "_" + this.randString(4);
+		// create the marker
+		this.ViewBonePoseAt(actorName, boneName, timestamp, marker_id, markerType, color, scale);
+	}
+	
+	/**
+	 * View and return the Pose of the actors bone at the given timepoint (or the most recent one)
+	 */
+	public void ViewBonePoseAt(String actorName,
+			String boneName,
 			String timestampStr, 
 			String markerID,
 			String markerType,
@@ -1327,6 +1538,27 @@ public class MongoRobcogQueries {
 			float scale){	
 		// get the pose of the actor
 		final double[] pose = this.GetBonePoseAt(actorName, boneName, timestampStr);
+	
+		// return position as arraylist
+		ArrayList<Vector3d> pos = new ArrayList<Vector3d>();
+		pos.add(new Vector3d(pose[0],pose[1],pose[2]));
+		
+		// create the markers
+		this.CreateMarkers(pos, markerID, markerType, color, scale);
+	}
+	
+	/**
+	 * View and return the Pose of the actors bone at the given timepoint (or the most recent one)
+	 */
+	public void ViewBonePoseAt(String actorName,
+			String boneName,
+			double timestamp, 
+			String markerID,
+			String markerType,
+			String color,
+			float scale){	
+		// get the pose of the actor
+		final double[] pose = this.GetBonePoseAt(actorName, boneName, timestamp);
 	
 		// return position as arraylist
 		ArrayList<Vector3d> pos = new ArrayList<Vector3d>();
@@ -1356,8 +1588,49 @@ public class MongoRobcogQueries {
 	 * View and return the Traj of the actor between the given timepoints
 	 */
 	public void ViewActorTraj(String actorName,
+			double start,
+			double end,
+			String markerType,
+			String color,
+			float scale,
+			double deltaT){	
+		// gen id
+		final String marker_id = actorName + "_" + this.randString(4);
+		// create the marker
+		this.ViewActorTraj(actorName, start, end, marker_id, markerType, color, scale, deltaT);
+	}
+	
+	/**
+	 * View and return the Traj of the actor between the given timepoints
+	 */
+	public void ViewActorTraj(String actorName,
 			String start,
 			String end,
+			String markerID,
+			String markerType,
+			String color,
+			float scale,
+			double deltaT){		
+		// get the trajectory
+		final double[][] traj = this.GetActorTraj(actorName, start, end, deltaT);
+
+		// positions as arraylist
+		ArrayList<Vector3d> pos = new ArrayList<Vector3d>();
+
+		// add trajectory points
+		for (int i = 0; i < traj.length; i++){
+			pos.add(new Vector3d(traj[i][0], traj[i][1], traj[i][2]));
+		}
+		// create the markers
+		this.CreateMarkers(pos, markerID, markerType, color, scale);
+	}
+	
+	/**
+	 * View and return the Traj of the actor between the given timepoints
+	 */
+	public void ViewActorTraj(String actorName,
+			double start,
+			double end,
 			String markerID,
 			String markerType,
 			String color,
@@ -1394,10 +1667,57 @@ public class MongoRobcogQueries {
 		this.ViewBoneTraj(actorName, boneName, start, end, marker_id, markerType, color, scale, deltaT);
 	}
 	
+	/**
+	 * View and return the Pose of the actor between the given timepoints
+	 */
+	public void ViewBoneTraj(String actorName,
+			String boneName,
+			double start,
+			double end,
+			String markerType,
+			String color,
+			float scale,
+			double deltaT){
+		// gen id
+		final String marker_id = boneName + "_" + this.randString(4);
+		// create the marker
+		this.ViewBoneTraj(actorName, boneName, start, end, marker_id, markerType, color, scale, deltaT);
+	}
+	
+	/**
+	 * View and return the Pose of the actor between the given timepoints
+	 */
 	public void ViewBoneTraj(String actorName,
 			String boneName,
 			String start,
 			String end,
+			String markerID,
+			String markerType,
+			String color,
+			float scale,
+			double deltaT){
+		// get the trajectory
+		final double[][] traj = this.GetBoneTraj(actorName, boneName, start, end, deltaT);
+		
+		// positions as arraylist
+		ArrayList<Vector3d> pos = new ArrayList<Vector3d>();
+		
+		// add trajectory points
+		for (int i = 0; i < traj.length; i++){
+			pos.add(new Vector3d(traj[i][0], traj[i][1], traj[i][2]));
+		}	
+	
+		// create the markers
+		this.CreateMarkers(pos, markerID, markerType, color, scale);
+	}
+	
+	/**
+	 * View and return the Pose of the actor between the given timepoints
+	 */
+	public void ViewBoneTraj(String actorName,
+			String boneName,
+			double start,
+			double end,
 			String markerID,
 			String markerType,
 			String color,
@@ -1431,7 +1751,24 @@ public class MongoRobcogQueries {
 		// create the marker
 		this.ViewBonesPoses(actorName, timestampStr, marker_id, markerType, color, scale);
 	}
+	
+	/**
+	 * View and return the Poses of the actor bones at the given timepoint (or the most recent one)
+	 */
+	public void ViewBonesPoses(String actorName,
+			double timestamp,
+			String markerType,
+			String color,
+			float scale){
+		// gen id
+		final String marker_id = actorName + "_" + this.randString(4);
+		// create the marker
+		this.ViewBonesPoses(actorName, timestamp, marker_id, markerType, color, scale);
+	}
 
+	/**
+	 * View and return the Poses of the actor bones at the given timepoint (or the most recent one)
+	 */
 	public void ViewBonesPoses(String actorName,
 			String timestampStr,
 			String markerID,
@@ -1440,6 +1777,30 @@ public class MongoRobcogQueries {
 			float scale){
 		// get the bones poses
 		final double[][] poses = this.GetBonesPosesAt(actorName, timestampStr);
+		
+		// positions as arraylist
+		ArrayList<Vector3d> pos = new ArrayList<Vector3d>();
+		
+		// add bones points
+		for (int i = 0; i < poses.length; i++){
+			pos.add(new Vector3d(poses[i][0], poses[i][1], poses[i][2]));
+		}
+	
+		// create the markers
+		this.CreateMarkers(pos, markerID, markerType, color, scale);
+	}
+	
+	/**
+	 * View and return the Poses of the actor bones at the given timepoint (or the most recent one)
+	 */
+	public void ViewBonesPoses(String actorName,
+			double timestamp,
+			String markerID,
+			String markerType,
+			String color,
+			float scale){
+		// get the bones poses
+		final double[][] poses = this.GetBonesPosesAt(actorName, timestamp);
 		
 		// positions as arraylist
 		ArrayList<Vector3d> pos = new ArrayList<Vector3d>();
@@ -1473,8 +1834,52 @@ public class MongoRobcogQueries {
 	 * View and return the Trajectories of the actor bones at the given timepoint (or the most recent one)
 	 */
 	public void ViewBonesTrajs(String actorName,
+			double start,
+			double end,
+			String markerType,
+			String color,
+			float scale,
+			double deltaT){
+		// gen id
+		final String marker_id = actorName + "_" + this.randString(4);
+		// create the marker
+		this.ViewBonesTrajs(actorName, start, end, marker_id, markerType, color, scale, deltaT);
+	}
+	
+	/**
+	 * View and return the Trajectories of the actor bones at the given timepoint (or the most recent one)
+	 */
+	public void ViewBonesTrajs(String actorName,
 			String start,
 			String end,
+			String markerID,
+			String markerType,
+			String color,
+			float scale,
+			double deltaT){
+		// call further using double for timestamps
+		final double[][][] trajs = this.GetBonesTrajs(actorName, start, end, deltaT);
+		
+		// positions as arraylist
+		ArrayList<Vector3d> pos = new ArrayList<Vector3d>();
+		
+		// add trajectory points to the marker
+		for (int i = 0; i < trajs.length; i++){
+			for(int j = 0; j < trajs[i].length; j++){				
+				pos.add(new Vector3d(trajs[i][j][0], trajs[i][j][1], trajs[i][j][2]));
+			}
+		}
+		
+		// create the markers
+		this.CreateMarkers(pos, markerID, markerType, color, scale);
+	}
+	
+	/**
+	 * View and return the Trajectories of the actor bones at the given timepoint (or the most recent one)
+	 */
+	public void ViewBonesTrajs(String actorName,
+			double start,
+			double end,
 			String markerID,
 			String markerType,
 			String color,
