@@ -1,6 +1,6 @@
 /** <module> robcog_mongo_queries
 
-  Copyright (C) 2016 Andrei Haidu
+  Copyright (C) 2017 Andrei Haidu
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
@@ -42,6 +42,8 @@
         view_mesh/5,
         view_bones_meshes/4,
         view_bones_meshes/5,
+        view_skeletal_mesh/4,
+        view_skeletal_mesh/5,
 
         actor_traveled_distance/6,
         actor_traveled_distance_xy/6,
@@ -69,6 +71,7 @@
 
         u_marker_remove/1,
         u_marker_remove_all/0,
+        u_marker_remove_skel/0,
 
         add_rating/4,
 
@@ -176,6 +179,26 @@ view_bones_meshes(EpInst, Actor, Ts, MarkerID, MeshFolderPath) :-
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'ViewBonesMeshesAt',
         [Actor, Ts, MarkerID, MeshFolderPath], @void).
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
+% View the skeletal mesh at the given timestamp
+% Actor = 'LeftHand'
+% MeshPath = 'path to the mesh'
+% MarkerID = 'hand_marker_id1'
+view_skeletal_mesh(EpInst, Actor, Ts, MeshFolderPath) :-
+    mongo_robcog_query(MongoQuery),
+    get_mongo_coll_name(EpInst, CollName),
+    set_mongo_coll(CollName),
+    jpl_call(MongoQuery, 'ViewSkeletalMeshAt',
+        [Actor, Ts, MeshFolderPath], @void).
+%%
+view_skeletal_mesh(EpInst, Actor, Ts, MarkerID, MeshFolderPath) :-
+    mongo_robcog_query(MongoQuery),
+    get_mongo_coll_name(EpInst, CollName),
+    set_mongo_coll(CollName),
+    jpl_call(MongoQuery, 'ViewSkeletalMeshAt',
+        [Actor, Ts, MarkerID, MeshFolderPath], @void).
+
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
 % Get the distance traveled by the actor between the timestamps
@@ -399,6 +422,12 @@ u_marker_remove(MarkerID) :-
 u_marker_remove_all :-
     mongo_robcog_query(MongoQuery),
     jpl_call(MongoQuery, 'RemoveAllMarkers', [], @void).
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
+% Remove all skeletal markers created with the knowrob_robcog package
+u_marker_remove_skel :-
+    mongo_robcog_query(MongoQuery),
+    jpl_call(MongoQuery, 'RemoveAllSkeletalMeshMarkers', [], @void).    
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
 % Add rating to file

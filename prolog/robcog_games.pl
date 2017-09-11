@@ -124,8 +124,6 @@ sem_map_inst(EpInst, MapInst) :-
 
 % Update all the loaded visual marker positions at the given timestamp
 show_world_state(EpInst, Timestamp) :-
-    rdf_has(EpInst, knowrob_u:'semanticMap', MapInst),
-    rdf_has(MapInst, rdf:type, knowrob:'SemanticEnvironmentMap'),
     findall(_, (
                 marker(object(MarkerTerm), MarkerObject),
                 rdf_split_url(_, ObjectName, MarkerTerm),

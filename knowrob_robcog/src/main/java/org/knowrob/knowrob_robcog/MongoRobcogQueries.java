@@ -603,7 +603,7 @@ public class MongoRobcogQueries {
 		Cursor cursor = this.MongoRobcogConn.coll.aggregate(pipeline, aggregationOptions);
 		
 		// Traj as dynamic array
-		List<double[]> traj_list_xy = new ArrayList<double[]>();
+		List<double[]> traj_list_xyz = new ArrayList<double[]>();
 		
 		// if the query returned nothing distance is 0.
 		if(!cursor.hasNext())
@@ -628,7 +628,7 @@ public class MongoRobcogQueries {
 			if(curr_ts - prev_ts > deltaT)
 			{			
 				// get the current pose
-				traj_list_xy.add(new double[] {
+				traj_list_xyz.add(new double[] {
 						((BasicDBObject) curr_doc.get("pos")).getDouble("x"),
 						((BasicDBObject) curr_doc.get("pos")).getDouble("y"),
 						((BasicDBObject) curr_doc.get("pos")).getDouble("z")});
@@ -640,10 +640,10 @@ public class MongoRobcogQueries {
 		cursor.close();
 		
 		// Iterate and calculate the 3D points distance backwards until the second last point
-		for (int i = traj_list_xy.size() - 1 ; i >= 1 ; i--) {			
-			final x1_x0 = traj_list_xy.get(i)[0] - traj_list_xy.get(i-1)[0];
-			final y1_y0 = traj_list_xy.get(i)[1] - traj_list_xy.get(i-1)[1];
-			final z1_z0 = traj_list_xy.get(i)[2] - traj_list_xy.get(i-1)[2];
+		for (int i = traj_list_xyz.size() - 1 ; i >= 1 ; i--) {			
+			final double x1_x0 = traj_list_xyz.get(i)[0] - traj_list_xyz.get(i-1)[0];
+			final double y1_y0 = traj_list_xyz.get(i)[1] - traj_list_xyz.get(i-1)[1];
+			final double z1_z0 = traj_list_xyz.get(i)[2] - traj_list_xyz.get(i-1)[2];
 			traveled_distance += Math.sqrt((x1_x0 * x1_x0) + (y1_y0 * y1_y0) + (z1_z0 * z1_z0));
 		}
 		
@@ -731,8 +731,8 @@ public class MongoRobcogQueries {
 		
 		// Iterate and calculate the 2D points distance backwards until the second last point
 		for (int i = traj_list_xy.size() - 1 ; i >= 1 ; i--) {			
-			final x1_x0 = traj_list_xy.get(i)[0] - traj_list_xy.get(i-1)[0];
-			final y1_y0 = traj_list_xy.get(i)[1] - traj_list_xy.get(i-1)[1];			
+			final double x1_x0 = traj_list_xy.get(i)[0] - traj_list_xy.get(i-1)[0];
+			final double y1_y0 = traj_list_xy.get(i)[1] - traj_list_xy.get(i-1)[1];			
 			traveled_distance += Math.sqrt((x1_x0 * x1_x0) + (y1_y0 * y1_y0));
 		}
 		
@@ -1223,6 +1223,10 @@ public class MongoRobcogQueries {
 		this.ViewActorMeshAt(actorName, timestampStr, marker_id, meshPath);
 	}
 	
+	/**
+	 * Query the Pose of the given model at the given timepoint (or the most recent one)
+	 * view results as rviz mesh marker 
+	 */
 	public void ViewActorMeshAt(String actorName,			
 			String timestampStr, 
 			String markerID,
@@ -1247,6 +1251,10 @@ public class MongoRobcogQueries {
 		this.ViewBonesMeshesAt(actorName, timestampStr, marker_id, meshFolderPath);
 	}
 	
+	/**
+	 * Get the poses of the actorss bones meshes at the given timestamp
+	 * view results as rviz markers
+	 */
 	public void ViewBonesMeshesAt(String actorName,
 			String timestampStr,
 			String markerID,
@@ -1259,6 +1267,37 @@ public class MongoRobcogQueries {
 
 		// create the bones mesh markers
 		this.CreateBonesMeshMarkers(bone_poses, names, markerID, meshFolderPath);
+	}
+	
+	/**
+	 * Get the poses of the actorss bones meshes at the given timestamp
+	 * view results as rviz markers
+	 */
+	public void ViewSkeletalMeshAt(String actorName,
+			String timestampStr,
+			String meshFolderPath){	
+		// gen id
+		final String marker_id = actorName + "_" + this.randString(4);
+		// create the marker
+		this.ViewSkeletalMeshAt(actorName, timestampStr, marker_id, meshFolderPath);
+	}
+	
+	/**
+	 * Get the poses of the actorss bones meshes at the given timestamp
+	 * view results as rviz markers
+	 */
+	public void ViewSkeletalMeshAt(String actorName,
+			String timestampStr,
+			String markerID,
+			String meshFolderPath){		
+		// get the names of the bones
+		final String[] names = this.GetBonesNames(actorName); 
+	
+		// pos xyz rot wxyz for every bone
+		final double[][] bone_poses = this.GetBonesPosesAt(actorName, timestampStr);
+
+		// create the bones mesh markers
+		this.CreateSkeletalMeshMarkers(bone_poses, names, markerID, meshFolderPath);
 	}
 
 	/**
@@ -1276,6 +1315,9 @@ public class MongoRobcogQueries {
 		this.ViewBonePoseAt(actorName, boneName, timestampStr, marker_id, markerType, color, scale);
 	}
 	
+	/**
+	 * View and return the Pose of the actors bone at the given timepoint (or the most recent one)
+	 */
 	public void ViewBonePoseAt(String actorName,
 			String boneName,
 			String timestampStr, 
@@ -1310,6 +1352,9 @@ public class MongoRobcogQueries {
 		this.ViewActorTraj(actorName, start, end, marker_id, markerType, color, scale, deltaT);
 	}
 	
+	/**
+	 * View and return the Traj of the actor between the given timepoints
+	 */
 	public void ViewActorTraj(String actorName,
 			String start,
 			String end,
@@ -1424,6 +1469,9 @@ public class MongoRobcogQueries {
 		this.ViewBonesTrajs(actorName, start, end, marker_id, markerType, color, scale, deltaT);
 	}
 	
+	/**
+	 * View and return the Trajectories of the actor bones at the given timepoint (or the most recent one)
+	 */
 	public void ViewBonesTrajs(String actorName,
 			String start,
 			String end,
