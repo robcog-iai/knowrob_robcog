@@ -132,6 +132,12 @@ show_world_state(EpInst, Timestamp) :-
                 actor_pose(EpInst, EntityName, Timestamp, Pose),
                 u_split_pose(Pose, Pos, Quat),
                 marker_pose(MarkerObject, pose(Pos, Quat))
+            ), _),
+    u_marker_remove_skel,
+    findall(_, (
+                rdf_has(SkelEntity, knowrob_u:'pathToSkeletalMesh', literal(type(xsd:string, SkelMeshPath))),
+                rdf_split_url(_, EntityName, SkelEntity),
+                view_skeletal_mesh(EpInst, EntityName, Timestamp, SkelMeshPath)
             ), _).
 
 
