@@ -32,6 +32,10 @@
 :- module(robcog_games,
     [
         ep_inst/1,
+
+        ep_start_end_time/3,
+        ep_task_context/2,
+
         u_inst_name/2,
         show_ep_sem_map/1,
         sem_map_inst/1,
@@ -41,8 +45,11 @@
         u_task_context/2,
         u_occurs/2,
         u_occurs/4,
+
+        u_ep_timeline/2,
         u_ep_timeline/3,
         u_ep_timeline/4,
+
         event_type/2,
         obj_type/2,
         obj_mesh/2,
@@ -96,6 +103,17 @@
 % get the instance of the episode
 ep_inst(EpInst) :-
     rdf_has(EpInst, rdf:type, knowrob:'UnrealExperiment').
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% get the instance of the episode with the start and end time
+ep_start_end_time(EpInst, Start, End) :-
+    rdf_has(EpInst, knowrob:'startTime', Start),
+    rdf_has(EpInst, knowrob:'endTime', End).
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% get the instance of the episode with the task context description
+ep_task_context(EpInst, TaskContext) :-
+    rdf_has(EpInst, knowrob:'taskContext', literal(type(xsd:string, TaskContext))).
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % get the unique short name of the class
@@ -163,6 +181,45 @@ u_occurs(EpInst, EventInst, Start, End) :-
     rdf_has(EventInst, knowrob:'startTime', Start),
     rdf_has(EventInst, knowrob:'endTime', End).
 
+
+% create timeline diagram of the given experiment
+u_ep_timeline(EpInst, all) :-
+    findall(TC-(ST-ET),
+            (
+                u_occurs(EpInst, EvInst, Start, End),
+                u_task_context(EvInst, TC),
+                time_term(Start, ST),
+                time_term(End, ET)
+            ), 
+            Events
+        ),
+    pairs_keys_values(Events, Contexts, Times), 
+    pairs_keys_values(Times, StartTimes, EndTimes),
+    atom_concat(EpInst, '-all', DiagramID),
+    ep_task_context(EpInst, Title),
+    add_timeline(DiagramID, Title, Contexts, StartTimes, EndTimes).
+
+% create timeline diagram of the given experiment
+u_ep_timeline(EpInst, only-dynamic) :-
+    comp_duration(EpInst, EpDuration),
+    findall(TC-(ST-ET),
+            (
+                u_occurs(EpInst, EvInst, Start, End),
+                u_task_context(EvInst, TC),
+                time_term(Start, ST),
+                time_term(End, ET),
+                comp_duration(EvInst, EvDuration),
+                EpDuration - EvDuration > 0.2
+            ), 
+            Events
+        ),
+    pairs_keys_values(Events, Contexts, Times), 
+    pairs_keys_values(Times, StartTimes, EndTimes),
+    atom_concat(EpInst, '-only-dynamic', DiagramID),
+    ep_task_context(EpInst, Title),
+    add_timeline(DiagramID, Title, Contexts, StartTimes, EndTimes).
+
+
 % create timeline diagram of the given experiment
 u_ep_timeline(EpInst, DiagramID, Title) :-
     findall(TC-(ST-ET),
@@ -175,22 +232,28 @@ u_ep_timeline(EpInst, DiagramID, Title) :-
 % create timeline diagram of the given experiment
 u_ep_timeline(EpInst, all, DiagramID, Title) :-
     findall(TC-(ST-ET),
-        (u_occurs(EpInst, EvInst, Start, End), u_task_context(EvInst, TC), time_term(Start, ST), time_term(End, ET)), 
-        Events),
+        (
+            u_occurs(EpInst, EvInst, Start, End),
+            u_task_context(EvInst, TC),
+            time_term(Start, ST),
+            time_term(End, ET)), 
+            Events
+        ),
     pairs_keys_values(Events, Contexts, Times), 
     pairs_keys_values(Times, StartTimes, EndTimes),
     add_timeline(DiagramID, Title, Contexts, StartTimes, EndTimes).
 
 % create timeline diagram of the given experiment
-u_ep_timeline(EpInst, ignore-uninterrupted, DiagramID, Title) :-
+u_ep_timeline(EpInst, only-dynamic, DiagramID, Title) :-
+    comp_duration(EpInst, EpDuration),
     findall(TC-(ST-ET),
         (
             u_occurs(EpInst, EvInst, Start, End),
             u_task_context(EvInst, TC),
             time_term(Start, ST),
-            time_term(End, ET)
-            %rdf_has(EpInst, knowrob:'startTime', Start),
-            %rdf_has(EpInst, knowrob:'endTime', End),
+            time_term(End, ET),
+            comp_duration(EvInst, EvDuration),
+            EpDuration - EvDuration < 0.2
         ), 
         Events),
 
