@@ -71,6 +71,7 @@
 
         u_marker_remove/1,
         u_marker_remove_all/0,
+        u_marker_remove_trajs/0,
         u_marker_remove_skel/0,
 
         add_rating/4,
@@ -422,6 +423,12 @@ u_marker_remove(MarkerID) :-
 u_marker_remove_all :-
     mongo_robcog_query(MongoQuery),
     jpl_call(MongoQuery, 'RemoveAllMarkers', [], @void).
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
+% Remove all markers created with the knowrob_robcog package
+u_marker_remove_trajs :-
+    mongo_robcog_query(MongoQuery),
+    jpl_call(MongoQuery, 'RemoveAllMarkers', [], @void).    
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
 % Remove all skeletal markers created with the knowrob_robcog package
