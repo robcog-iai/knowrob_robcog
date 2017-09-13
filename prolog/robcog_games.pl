@@ -45,6 +45,7 @@
         u_task_context/2,
         u_occurs/2,
         u_occurs/4,
+        u_occurs/5,
 
         u_ep_timeline/2,
         u_ep_timeline/3,
@@ -54,6 +55,7 @@
         obj_type/2,
         obj_mesh/2,
         acted_on/2,
+        u_acted_on/2,
         performed_by/2,
 
         particle_type/2,
@@ -89,10 +91,12 @@
     u_ep_timeline(r,r,+,+),
     sem_map_inst(r, r),
     rating_score(r, r, r),
+    u_occurs(r, r, r, r, r),
     event_type(+, r),
     obj_type(+, r),
     obj_mesh(+, r),
     acted_on(+, r),
+    u_acted_on(+, r),
     performed_by(+, r),
     particle_type(+, r),
     in_contact(+, r, r),
@@ -178,6 +182,13 @@ u_occurs(EpInst, EventInst) :-
 % get events which occured in the episodes
 u_occurs(EpInst, EventInst, Start, End) :-
     rdf_has(EpInst, knowrob:'subAction', EventInst),
+    rdf_has(EventInst, knowrob:'startTime', Start),
+    rdf_has(EventInst, knowrob:'endTime', End).
+
+% get events which occured in the episodes
+u_occurs(EpInst, EventInst, EventType, Start, End) :-
+    rdf_has(EpInst, knowrob:'subAction', EventInst),
+    rdf_has(EventInst, rdf:type, EventType),
     rdf_has(EventInst, knowrob:'startTime', Start),
     rdf_has(EventInst, knowrob:'endTime', End).
 
@@ -290,7 +301,14 @@ obj_mesh(ObjInst, ObjMeshPath) :-
 % check object acted on
 acted_on(EventInst, ObjActedOnType) :-
     rdf_has(EventInst, knowrob:'objectActedOn', ObjActedOnInst),
-    rdf_has(ObjActedOnInst, rdf:type, ObjActedOnType).
+    rdf_has(ObjActedOnInst, rdf:type, ObjActedOnType),
+    not(rdf_equal(ObjActedOnType, owl:'NamedIndividual')).
+
+% check object acted on
+u_acted_on(EventInst, EntityName) :-
+    rdf_has(EventInst, knowrob:'objectActedOn', ObjActedOnInst),
+    rdf_split_url(_, EntityName, ObjActedOnInst).
+
 
 % check performed by
 performed_by(EventInst, PerformedByInst) :-
