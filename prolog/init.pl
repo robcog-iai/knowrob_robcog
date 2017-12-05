@@ -51,6 +51,8 @@
 :- rdf_db:rdf_register_ns(log, 'http://knowrob.org/kb/unreal_log.owl#', [keep(true)]).
 :- rdf_db:rdf_register_ns(u-map, 'http://knowrob.org/kb/u_map.owl#', [keep(true)]).
 
+:- owl_parser:owl_parse('package://knowrob_robcog/owl/unreal_events.owl').
+
 %Extended ontology example
 %% :- owl_parser:owl_parse('package://knowrob_saphari/owl/saphari.owl').
 %% :- rdf_db:rdf_register_ns(saphari, 'http://knowrob.org/kb/saphari.owl#', [keep(true)]).

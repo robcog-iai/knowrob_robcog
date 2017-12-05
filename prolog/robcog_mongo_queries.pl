@@ -35,6 +35,7 @@
 
         actor_pose/3,
         actor_pose/4,
+        comp_contact_roles/3,
         view_actor_pose/6,
         view_actor_pose/7,
 
@@ -121,6 +122,26 @@ actor_pose(EpInst, Actor, Ts, Pose) :-
     set_mongo_coll(CollName),
     jpl_call(MongoQuery, 'GetActorPoseAt', [Actor, Ts], JavaArr),
     jpl_array_to_list(JavaArr, Pose).
+
+comp_contact_roles(EpInst, TouchEvent, CollisionEvent) :-
+    findall(Object, rdf_has(TouchEvent, 'http://knowrob.org/kb/knowrob_u.owl#inContact', Object), Objects),
+    nth0(0, Objects, FirstObject, [SecondObject]),
+    occurs(TouchEvent, [S,_]),
+    rdf_has(TouchEvent, knowrob:'startTime', STime),
+    rdf_split_url(_, FirstId, FirstObject),
+    actor_pose(EpInst, FirstId, S, [X, Y, Z, _, _, _, _]),
+    Before is S - 1,
+    actor_pose(EpInst, FirstId, Before, [X_B, Y_B, Z_B, _, _, _, _]),
+    DX is X - X_B,
+    DY is Y - Y_B,
+    DZ is Z - Z_B,
+    D is sqrt( ((DX*DX) + (DY*DY)) + (DZ*DZ)),
+    rdf_instance_from_class('http://knowrob.org/kb/knowrob.owl#Collision', CollisionEvent),
+    rdf_assert(CollisionEvent, rdf:type, 'http://knowrob.org/kb/knowrob.owl#Collision'),
+    rdf_assert(CollisionEvent, knowrob:'startTime', STime),
+    rdf_assert(CollisionEvent, knowrob:'endTime', STime),
+    (( D < 0.05, rdf_assert(CollisionEvent, knowrob:'collider', SecondObject), rdf_assert(CollisionEvent, knowrob:'collidee', FirstObject));	 
+    ( D > 0.05, rdf_assert(CollisionEvent, knowrob:'collider', FirstObject), rdf_assert(CollisionEvent, knowrob:'collidee', SecondObject))).
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %  
 % View the pose of the actor at the given timestamp
