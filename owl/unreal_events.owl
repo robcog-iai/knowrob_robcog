@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE rdf:RDF[
+	<!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+	<!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+	<!ENTITY owl "http://www.w3.org/2002/07/owl">
+	<!ENTITY xsd "http://www.w3.org/2001/XMLSchema#">
+	<!ENTITY knowrob "http://knowrob.org/kb/knowrob.owl#">
+	<!ENTITY knowrob_u "http://knowrob.org/kb/knowrob_u.owl#">
+	<!ENTITY log "http://knowrob.org/kb/unreal_log.owl#">
+	<!ENTITY u-map "http://knowrob.org/kb/u_map.owl#">
+]>
+
+<rdf:RDF 
+	xmlns:computable="http://knowrob.org/kb/computable.owl#"
+	xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:knowrob="http://knowrob.org/kb/knowrob.owl#"
+	xmlns:knowrob_u="http://knowrob.org/kb/knowrob_u.owl#"
+	xmlns:u-map="http://knowrob.org/kb/u_map.owl#"
+	xml:base="http://knowrob.org/kb/u_map.owl#"
+>
+
+	<!-- Ontologies -->
+	<owl:Ontology rdf:about="http://knowrob.org/kb/u_map.owl">
+		<owl:imports rdf:resource="package://knowrob_common/owl/knowrob.owl"/>
+		<owl:imports rdf:resource="package://knowrob_robcog/owl/knowrob_u.owl"/>
+	</owl:Ontology>
+
+        <owl:Class rdf:about="&knowrob;UnrealExperiment">
+               <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Event"/>
+               <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#RobotExperiment"/>
+        </owl:Class>
+
+	<owl:Class rdf:about="&knowrob_u;TouchingSituation">
+               <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Event"/>
+        </owl:Class>
+
+        <owl:Class rdf:about="&knowrob;Collision">
+               <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob_u.owl#TouchingSituation"/>
+        </owl:Class>
+
+	<owl:Class rdf:about="&knowrob_u;KitchenEpisode">
+               <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Event"/>
+               <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#RobotExperiment"/>
+        </owl:Class>
+
+	<owl:Class rdf:about="&knowrob_u;FurnitureStateClosed">
+               <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Event"/>
+        </owl:Class>
+
+	<owl:Class rdf:about="&knowrob_u;FurnitureStateHalfClosed">
+               <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Event"/>
+        </owl:Class>
+
+	<owl:Class rdf:about="&knowrob_u;FurnitureStateOpened">
+               <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Event"/>
+        </owl:Class>
+
+	<owl:Class rdf:about="&knowrob_u;FurnitureStateHalfOpened">
+              <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Event"/>
+        </owl:Class>
+
+	<owl:Class rdf:about="&knowrob_u;HandManipulation">
+              <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Action"/>
+        </owl:Class>
+     
+	<owl:Class rdf:about="&knowrob_u;GraspingMulitpleItems">
+              <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#GraspingSomething"/>
+        </owl:Class>
+
+	<owl:Class rdf:about="&knowrob_u;AddTopping">
+              <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob_u.owl#HandManipulation"/>
+        </owl:Class>
+
+	<owl:Class rdf:about="&knowrob_u;CutItem">
+              <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob_u.owl#HandManipulation"/>
+        </owl:Class>
+
+	<owl:Class rdf:about="&knowrob_u;CreateEntity">
+              <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob_u.owl#HandManipulation"/>
+        </owl:Class>
+
+	<owl:Class rdf:about="&knowrob_u;DestroyEntity">
+              <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob_u.owl#HandManipulation"/>
+        </owl:Class>
+
+        <owl:Class rdf:about="&knowrob;KoellnMuesliCranberry">
+              <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#BreakfastCereal"/>
+        </owl:Class>
+
+        <owl:Class rdf:about="&knowrob;BaerenMarkeFrischeAlpenmilch18">
+              <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Milk"/>
+        </owl:Class>
+
+        <owl:Class rdf:about="&knowrob;BowlLarge">
+              <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Bowl-Eating"/>
+        </owl:Class>
+
+        <owl:Class rdf:about="&knowrob;SpoonSoup">
+              <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Spoon"/>
+        </owl:Class>
+
+</rdf:RDF>
