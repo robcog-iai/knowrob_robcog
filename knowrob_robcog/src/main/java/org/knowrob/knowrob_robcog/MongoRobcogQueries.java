@@ -458,10 +458,10 @@ public class MongoRobcogQueries {
 					((BasicDBObject) first_doc.get("pos")).getDouble("x"),
 					((BasicDBObject) first_doc.get("pos")).getDouble("y"),
 					((BasicDBObject) first_doc.get("pos")).getDouble("z"),
-					((BasicDBObject) first_doc.get("rot")).getDouble("w"),
 					((BasicDBObject) first_doc.get("rot")).getDouble("x"),
 					((BasicDBObject) first_doc.get("rot")).getDouble("y"),
-					((BasicDBObject) first_doc.get("rot")).getDouble("z")};
+					((BasicDBObject) first_doc.get("rot")).getDouble("z"),
+					((BasicDBObject) first_doc.get("rot")).getDouble("w")};
 		}
 		else
 		{
@@ -555,10 +555,10 @@ public class MongoRobcogQueries {
 						((BasicDBObject) curr_doc.get("pos")).getDouble("x"),
 						((BasicDBObject) curr_doc.get("pos")).getDouble("y"),
 						((BasicDBObject) curr_doc.get("pos")).getDouble("z"),
-						((BasicDBObject) curr_doc.get("rot")).getDouble("w"),
 						((BasicDBObject) curr_doc.get("rot")).getDouble("x"),
 						((BasicDBObject) curr_doc.get("rot")).getDouble("y"),
-						((BasicDBObject) curr_doc.get("rot")).getDouble("z")});
+						((BasicDBObject) curr_doc.get("rot")).getDouble("z"),
+						((BasicDBObject) curr_doc.get("rot")).getDouble("w")});
 				prev_ts = curr_ts;
 				//System.out.println(curr_doc.toString());
 			}
@@ -856,10 +856,10 @@ public class MongoRobcogQueries {
 					((BasicDBObject) first_doc.get("pos")).getDouble("x"),
 					((BasicDBObject) first_doc.get("pos")).getDouble("y"),
 					((BasicDBObject) first_doc.get("pos")).getDouble("z"),
-					((BasicDBObject) first_doc.get("rot")).getDouble("w"),
 					((BasicDBObject) first_doc.get("rot")).getDouble("x"),
 					((BasicDBObject) first_doc.get("rot")).getDouble("y"),
-					((BasicDBObject) first_doc.get("rot")).getDouble("z")};
+					((BasicDBObject) first_doc.get("rot")).getDouble("z"),
+					((BasicDBObject) first_doc.get("rot")).getDouble("w")};
 		}
 		else
 		{
@@ -956,10 +956,10 @@ public class MongoRobcogQueries {
 						((BasicDBObject) curr_doc.get("pos")).getDouble("x"),
 						((BasicDBObject) curr_doc.get("pos")).getDouble("y"),
 						((BasicDBObject) curr_doc.get("pos")).getDouble("z"),
-						((BasicDBObject) curr_doc.get("rot")).getDouble("w"),
 						((BasicDBObject) curr_doc.get("rot")).getDouble("x"),
 						((BasicDBObject) curr_doc.get("rot")).getDouble("y"),
-						((BasicDBObject) curr_doc.get("rot")).getDouble("z")});
+						((BasicDBObject) curr_doc.get("rot")).getDouble("z"),
+						((BasicDBObject) curr_doc.get("rot")).getDouble("w")});
 				prev_ts = curr_ts;
 				//System.out.println(curr_doc.toString());
 			}
@@ -1110,10 +1110,10 @@ public class MongoRobcogQueries {
 					((BasicDBObject) pos_list.get(i)).getDouble("x"),
 					((BasicDBObject) pos_list.get(i)).getDouble("y"),
 					((BasicDBObject) pos_list.get(i)).getDouble("z"),
-					((BasicDBObject) rot_list.get(i)).getDouble("w"),
 					((BasicDBObject) rot_list.get(i)).getDouble("x"),
 					((BasicDBObject) rot_list.get(i)).getDouble("y"),
-					((BasicDBObject) rot_list.get(i)).getDouble("z")});		
+					((BasicDBObject) rot_list.get(i)).getDouble("z"),
+					((BasicDBObject) rot_list.get(i)).getDouble("w")});		
 			}
 			// cast from dynamic array to standard array
 			return pose_list.toArray(new double[pose_list.size()][7]);
@@ -1229,10 +1229,10 @@ public class MongoRobcogQueries {
 							((BasicDBObject) pos_list.get(i)).getDouble("x"),
 							((BasicDBObject) pos_list.get(i)).getDouble("y"),
 							((BasicDBObject) pos_list.get(i)).getDouble("z"),
-							((BasicDBObject) rot_list.get(i)).getDouble("w"),
 							((BasicDBObject) rot_list.get(i)).getDouble("x"),
 							((BasicDBObject) rot_list.get(i)).getDouble("y"),
-							((BasicDBObject) rot_list.get(i)).getDouble("z")});
+							((BasicDBObject) rot_list.get(i)).getDouble("z"),
+							((BasicDBObject) rot_list.get(i)).getDouble("w")});
 				}
 				// cast from dynamic array to standard array
 				bone_trajs.add(pose_list.toArray(new double[nr_bones][7]));				
