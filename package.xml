@@ -13,15 +13,31 @@
   <url type="bugtracker">https://github.com/knowrob/knowrob/issues</url>
 
   <buildtool_depend>catkin</buildtool_depend>
-
-
+  <buildtool_depend>world_control_msgs</buildtool_depend>
+  <buildtool_depend>unreal_vis_msgs</buildtool_depend>
 <!--   <build_depend>knowrob_objects</build_depend> -->
 <!--   <build_depend>knowrob_srdl</build_depend> -->
 <!--   <build_depend>tf_prolog</build_depend> -->
 
+  <build_depend>world_control_msgs</build_depend>
+  <run_depend>world_control_msgs</run_depend>
+
+  <build_depend>unreal_vis_msgs</build_depend>
+  <run_depend>unreal_vis_msgs</run_depend>
+
+  <build_depend>roslib</build_depend>
+  <build_depend>rospack</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rosprolog</build_depend>
 
   <run_depend>knowrob_maps</run_depend>
   <run_depend>knowrob_objects</run_depend>
+
+  <run_depend>roslib</run_depend>
+  <run_depend>rospack</run_depend>
+  <run_depend>roscpp</run_depend>
+
+  <run_depend>rosprolog</run_depend>
 <!--   <run_depend>knowrob_srdl</run_depend> -->
 <!--   <run_depend>tf_prolog</run_depend> -->
 
