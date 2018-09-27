@@ -39,10 +39,10 @@ PREDICATE(spawn_model, 9) {
     srv.request.pose.position.y = (double)PL_A4;
     srv.request.pose.position.z = (double)PL_A5;
 
-    srv.request.pose.orientation.x = (double)PL_A6;
-    srv.request.pose.orientation.y = (double)PL_A7;
-    srv.request.pose.orientation.z = (double)PL_A8;
-    srv.request.pose.orientation.w = (double)PL_A9;
+    srv.request.pose.orientation.x = (double)PL_A7;
+    srv.request.pose.orientation.y = (double)PL_A8;
+    srv.request.pose.orientation.z = (double)PL_A9;
+    srv.request.pose.orientation.w = (double)PL_A6;
 
     client.call(srv);
     return srv.response.success ? TRUE : FALSE;

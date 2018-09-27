@@ -6,9 +6,9 @@ spawn_semantic_map(Map, Objects, Constraints, Relations) :-
 spawn_models(Map, Raw) :-
    map_root_object(Map, ObjectToSpawn),
    rdf_has(ObjectToSpawn, knowrob:pose, _),
-   spawn_models(ObjectToSpawn, Raw).
+   spawn_model(ObjectToSpawn, Raw).
 
-spawn_models(ObjectToSpawn, Raw) :-
+spawn_model(ObjectToSpawn, Raw) :-
   current_object_pose(ObjectToSpawn, Pose),
   rdf_has(ObjectToSpawn, rdf:type, Name),
   not(rdf_equal(Name, owl:'NamedIndividual')),
