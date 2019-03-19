@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://knowrob.org/kb/fridge.owl#"
+	 xml:base="http://knowrob.org/kb/fridge.owl#"
+	 xmlns:owl="http://www.w3.org/2002/07/owl#"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+	 xmlns:knowrob="http://knowrob.org/kb/knowrob.owl#"
+	 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+   <owl:Ontology rdf:about="http://knowrob.org/kb/iai_kitchen_furniture.owl">
+        <owl:imports rdf:resource="package://knowrob_common/owl/knowrob.owl"/>
+      	<owl:imports rdf:resource="package://knowrob_household/owl/kitchen_furniture.owl"/>
+   </owl:Ontology>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAITapTop">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Tap-PlumbingFixture"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIHandleW86">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Handle"/>
+  </owl:Class>
+
+	<owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIHandleW80">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Handle"/>
+  </owl:Class>
+
+	<owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIHandleW60">
+			<rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Handle"/>
+	</owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDishwasherDoorPanel">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Door"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAITapBottom">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Tap-FlowControlDevice"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIOvenDoorHandle">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Handle"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIHandleH132">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Handle"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIHandleW100">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Handle"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIFridgeDoorPanel">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Door"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAITapMiddle">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Tap-FlowControlDevice"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDrawerW60H29">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Drawer"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDrawerW60H58">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Drawer"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDrawerW80H14">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Drawer"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDrawerW80H29">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Drawer"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDishwasherUpperRack">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#RackOfDishwasher"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDishwasherLowerRack">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#RackOfDishwasher"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDishwasherDoor">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Door"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIOvenDoor">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Door"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDrawerW30H132">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Drawer"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDrawerW60H14">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Drawer"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIFridgeDoor">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Door"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDrawerW60H36">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Drawer"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDrawerW100H29">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Drawer"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAILabWallsPillar">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#WallOfAConstruction"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIOvenKnob">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#ControlKnob"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAISink">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Sink"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#Sherpa">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Poster"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#Saphari">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Poster"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#Robohow">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Poster"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#Acat">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Poster"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAILabWalls">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#WallOfAConstruction"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIAnteroomLight">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#WindowTypAMetal">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIWindowTypeA">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#LabBlackBox">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#WallOfAConstruction"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDoorD">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Door"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIWindowTypeC">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Window"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#LabWallDoorFrame">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Door"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDoorC">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Door"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAILabFloor">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Floor"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDoorB">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Door"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDoorA">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Door"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#PosterRobohowSmall">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Door"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIWindowTypeB">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Window"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#RobohowFrame">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#PosterFrame"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#ACATFrame">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#PosterFrame"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#SherpaFrame">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#PosterFrame"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#SaphariFrame">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#PosterFrame"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIFridgeCasing">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Refrigerator"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAICooktop">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#StoveTop"/>
+		  <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#HeatSource"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIDishwasherCase">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Dishwasher"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAIOvenCase">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#RegularOven"/>
+		  <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#HeatSource"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#IAICeilingLight">
+      <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#Lamp-Hanging"/>
+  </owl:Class>
+
+	<owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#CowsMilk">
+			<rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#CowsMilk-Product"/>
+	</owl:Class>
+</rdf:RDF>
