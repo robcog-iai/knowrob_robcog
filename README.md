@@ -38,7 +38,7 @@ To execute the knowrob_robcog package run:
 
 The rosprolog prolog console should be startet now.  Before the a semantic map can be spawned it needs to be parse, which can be done by running:
 
-` owl_parse('PATH'). ` T
+` owl_parse('PATH'). ` 
 
 The path can be relative, so starting the prolog consol in same folder the semantic map is safed at can be helpful.
 
