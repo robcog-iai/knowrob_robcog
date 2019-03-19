@@ -1,10 +1,12 @@
 # knowrob_robcog #
 ## Setup
 ### Windows
-Follow RobCoG isntallation instructions: https://github.com/robcog-iai/RobCoG
+Follow RobCoG isntallation instructions [here](https://github.com/robcog-iai/RobCoG)
 In the RobCoG plugins folder run:
-git clone https://github.com/robcog-iai/UROSWorldControl.git
-git clone https://github.com/robcog-iai/UROSBridge.git
+
+`git clone https://github.com/robcog-iai/UROSWorldControl.git`
+
+`git clone https://github.com/robcog-iai/UROSBridge.git`
 
 
 ### ROS
@@ -17,6 +19,7 @@ In ROS all of the following packages need to be downloaded and build, if needed 
  * [rosbridge_suite](http://wiki.ros.org/rosbridge_suite)
 
  Once all the everything is build the rosbridge_suite websocket can be run by using the following command:
+ 
  ` roslaunch rosbridge_server rosbridge_websocket.launch `
 
 
@@ -30,17 +33,25 @@ If everything is set up correctly the Output Log should show all the services th
 
 ### ROS
 To execute the knowrob_robcog package run:
+
 ` rosrun rosprolog rosprolog knowrob_robcog `
+
 The rosprolog prolog console should be startet now.  Before the a semantic map can be spawned it needs to be parse, which can be done by running:
-` owl_parse('PATH'). ` The path can be relative, so starting the prolog consol in same folder the semantic map is safed at can be helpful.
+
+` owl_parse('PATH'). ` T
+
+The path can be relative, so starting the prolog consol in same folder the semantic map is safed at can be helpful.
 
 Parsing of the the semantic map can also be added to the *init.pl* file, by uncommenting line 56 and changing the path accordingly.
 
 Either way we can see if the map was parsed correctly by running:
+
 ` map_instance(Map). `
 
 Once the semantic map is parsed it can be spawned by running:
+
 ` spawn_semantic_map(Map) `
+
 NOTE: This will work if only one semantic map is loaded in the environment, otherwise the variable Map needs to point to the exact map instace that should be spawned.
 
 After the map is spawned the following prolog calls can be used to highlight objects in the enivornment.
