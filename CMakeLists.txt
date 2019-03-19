@@ -2,7 +2,14 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(knowrob_robcog)
 
-find_package(catkin REQUIRED world_control_msgs unreal_vis_msgs rosprolog roscpp roslib rospack geometry_msgs)
+find_package(catkin REQUIRED
+  world_control_msgs
+  unreal_vis_msgs
+  rosprolog
+  roscpp
+  roslib
+  rospack
+  geometry_msgs)
 
 
 generate_messages(
@@ -32,8 +39,8 @@ include_directories(include ${SWIPL_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
 add_library(prolog_service_calls SHARED src/prolog_service_calls.cpp)
 target_link_libraries(prolog_service_calls ${SWIPL_LIBRARIES} ${catkin_LIBRARIES})
 
-add_library(display_types_service_calls SHARED src/display_types_service_calls.cpp)
-target_link_libraries(display_types_service_calls ${SWIPL_LIBRARIES} ${catkin_LIBRARIES})
+#add_library(display_types_service_calls SHARED src/display_types_service_calls.cpp)
+#target_link_libraries(display_types_service_calls ${SWIPL_LIBRARIES} ${catkin_LIBRARIES})
 
 install(DIRECTORY prolog/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/prolog)

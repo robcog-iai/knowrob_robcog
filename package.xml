@@ -4,20 +4,16 @@
   <version>0.1.0</version>
   <description>The knowrob_robcog package</description>
 
-  <maintainer email="a.haidu@gmail.com">Andrei Haidu</maintainer>
+  <maintainer email="bveit@uni-bremen.com">Björn Veit</maintainer>
 
-  <author>Andrei Haidu</author>
+  <author>Björn Veit</author>
 
   <license>BSD</license>
 
-  <url type="bugtracker">https://github.com/knowrob/knowrob/issues</url>
 
   <buildtool_depend>catkin</buildtool_depend>
   <buildtool_depend>world_control_msgs</buildtool_depend>
   <buildtool_depend>unreal_vis_msgs</buildtool_depend>
-<!--   <build_depend>knowrob_objects</build_depend> -->
-<!--   <build_depend>knowrob_srdl</build_depend> -->
-<!--   <build_depend>tf_prolog</build_depend> -->
 
   <build_depend>world_control_msgs</build_depend>
   <run_depend>world_control_msgs</run_depend>
@@ -38,8 +34,6 @@
   <run_depend>roscpp</run_depend>
 
   <run_depend>rosprolog</run_depend>
-<!--   <run_depend>knowrob_srdl</run_depend> -->
-<!--   <run_depend>tf_prolog</run_depend> -->
 
 
 </package>
