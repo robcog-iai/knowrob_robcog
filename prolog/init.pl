@@ -43,7 +43,7 @@
 
 :- use_module(library('process')).
 :- use_module('prolog_service_calls').
-:- use_module('display_types_service_calls').
+%:- use_module('display_types_service_calls').
 
 % returns the namspace when outputting values
 :- rdf_db:rdf_register_ns(owl,    'http://www.w3.org/2002/07/owl#', [keep(true)]).
@@ -53,7 +53,7 @@
 :- rdf_db:rdf_register_ns(log, 'http://knowrob.org/kb/unreal_log.owl#', [keep(true)]).
 :- rdf_db:rdf_register_ns(u-map, 'http://knowrob.org/kb/u_map.owl#', [keep(true)]).
 
-:- owl_parser:owl_parse('package://knowrob_robcog/owl/SemanticMap.owl').
+%:- owl_parser:owl_parse('package://knowrob_robcog/owl/SemanticMap.owl').
+:- owl_parser:owl_parse('package://knowrob_robcog/owl/iai_kitchen_furniture.owl').
 :- rdf_db:rdf_register_ns(dm, 'http://knowrob.org/kb/dm-market.owl#', [keep(true)]).
-
-%:- consult('package://knowrob_robcog/prolog/spawn_semantic_map.pl').
+:- rdf_db:rdf_register_ns(unreal_kitchen, 'http://knowrob.org/kb/UE-IAI-Kitchen.owl#', [keep(true)]).
