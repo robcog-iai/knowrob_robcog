@@ -67,17 +67,17 @@ After the map is spawned the following prolog calls can be used to highlight obj
 
  ```
 
-get_subclass_in_map(Map, 'http://knowrob.org/kb/knoworb.owl#Refriguator', Individual),
+get_subclass_in_map(Map, 'http://knowrob.org/kb/knowrob.owl#Refrigerator', Individual),
 highlight(Individual).
 
-highlight_everything_that_is(Map, 'http://knowrob.org/kb/knoworb.owl#Handle').
+highlight_everything_that_is(Map, 'http://knowrob.org/kb/knowrob.owl#Handle').
 
-highlight_likely_storage_place(Map, 'http://knowrob.org/kb/knoworb.owl#Perishable').
+highlight_likely_storage_place(Map, 'http://knowrob.org/kb/knowrob.owl#Perishable').
 
-get_subclass_in_map(Map, 'http://knowrob.org/kb/knoworb.owl#Oven', Individual),
+get_subclass_in_map(Map, 'http://knowrob.org/kb/knowrob.owl#Oven', Individual),
 highlight_handle_of(Map, Individual, Handle).
 
-highlight_device_for_action(Map, 'http://knowrob.org/kb/knoworb.owl#WashingDishesByMachine').
+highlight_device_for_action(Map, 'http://knowrob.org/kb/knowrob.owl#WashingDishesByMachine', Device).
 
  ```
 
